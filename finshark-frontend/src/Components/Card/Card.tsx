@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { JSX } from 'react'
 import './Card.css'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
     Price: number
 };
 
-const Card = (props: Props) => {
+const Card: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <div className='card'>
         <img src="null" alt="Image" />
