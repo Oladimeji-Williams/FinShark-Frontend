@@ -1,14 +1,18 @@
 "use client"
 
 import { FC, JSX, useState } from 'react'
+import type { ChangeEvent, MouseEvent } from 'react'
 
 type Props = {}
 
-const Search: FC<Props> = (props: Props): JSX.Element => {
+const Search: FC<Props> = (): JSX.Element => {
     const [search, setSearch] = useState<string>('')
-    const onClick = (event: any) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
         console.log(search)
+    }
+    const onClick = (_event: MouseEvent<HTMLButtonElement>) => {
+        console.log("Search button clicked")
     }
   return (
     <div className='search'>
@@ -16,8 +20,9 @@ const Search: FC<Props> = (props: Props): JSX.Element => {
             type="text" 
             placeholder="Search for a company..." 
             value={search}
-            onChange={(event) => onClick(event)}
+            onChange={handleChange}
         />
+        <button onClick={onClick}>Search</button>
     </div>
   )
 }
