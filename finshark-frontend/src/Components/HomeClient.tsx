@@ -36,6 +36,7 @@ const HomeClient = (): JSX.Element => {
   return (
     <>
       <Search search={search} handleChange={handleChange} onClick={onClick} />
+      {serverError && <div className="error">{serverError}</div>}
       <CardList companies={companies} />
     </>
   );
