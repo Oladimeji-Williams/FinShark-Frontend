@@ -1,24 +1,20 @@
 "use client"
 
 import { FC, JSX } from 'react'
-import type { ChangeEvent, MouseEvent } from 'react'
+import type { ChangeEvent, SubmitEvent } from 'react'
 
 type Props = {
     search: string | undefined;
-    handleChange: (event: ChangeEvent<HTMLInputElement>) => void
-    onClick: (event: MouseEvent<HTMLButtonElement>) => void
+    handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void
+    onSearchSubmit: (event: SubmitEvent<HTMLFormElement>) => void
 }
 
 const Search: FC<Props> = (props: Props): JSX.Element => {
     return (
         <div className='search'>
-            <input
-                type="text"
-                placeholder="Search for a company..."
-                value={props.search}
-                onChange={props.handleChange}
-            />
-            <button onClick={props.onClick}>Search</button>
+            <form onSubmit={props.onSearchSubmit}>
+                <input type="text" value={props.search} onChange={props.handleSearchChange} placeholder='Search for a company...'/>
+            </form>
         </div>
     )
 }

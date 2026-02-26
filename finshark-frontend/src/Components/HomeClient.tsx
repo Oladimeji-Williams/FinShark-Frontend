@@ -1,7 +1,7 @@
 "use client";
 
-import { JSX, useEffect, useState } from "react";
-import type { ChangeEvent, MouseEvent } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import CardList from "@/Components/CardList/CardList";
 import Search from "@/Components/Search/Search";
 import { searchCompanies } from "../../api";
@@ -12,12 +12,7 @@ const HomeClient = (): JSX.Element => {
   const [companies, setCompanies] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string>("");
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-  };
-
-  const onClick = async (_event: MouseEvent<HTMLButtonElement>) => {
-    const query = search.trim();
+  const runSearch = useCallback(async (query: string) => {
     const result = await searchCompanies(query);
     console.log("searchCompanies result:", result);
     if (typeof result === "string") {
@@ -27,17 +22,54 @@ const HomeClient = (): JSX.Element => {
       setServerError("");
       setCompanies(result);
     }
+  }, []);
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
   };
+
+  const onSearchSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = search.trim();
+    if (!query) {
+      setServerError("");
+      setCompanies([]);
+      return;
+    }
+    await runSearch(query);
+  };
+
+  const onPortfolio = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const symbol = formData.get("symbol") as string;
+    console.log("Creating portfolio for symbol:", symbol);
+  }
 
   useEffect(() => {
     console.log("Updated companies state:", companies);
   }, [companies]);
 
+  useEffect(() => {
+    const query = search.trim();
+    if (!query) {
+      setServerError("");
+      setCompanies([]);
+      return;
+    }
+
+    const debounce = setTimeout(() => {
+      void runSearch(query);
+    }, 300);
+
+    return () => clearTimeout(debounce);
+  }, [search, runSearch]);
+
   return (
     <>
-      <Search search={search} handleChange={handleChange} onClick={onClick} />
+      <Search search={search} handleSearchChange={handleSearchChange} onSearchSubmit={onSearchSubmit} />
       {serverError && <div className="error">{serverError}</div>}
-      <CardList companies={companies} />
+      <CardList companies={companies} onPortfolioCreate={onPortfolio} />
     </>
   );
 };
