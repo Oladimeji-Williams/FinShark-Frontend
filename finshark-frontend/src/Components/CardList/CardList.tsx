@@ -15,10 +15,9 @@ const CardList: React.FC<Props> = (props: Props): JSX.Element => {
     <div>
       {props.companies.map((company) => (
         <Card
+          id={company.symbol}
           key={company.symbol}
-          CompanyName={company.name}
-          Ticker={company.symbol}
-          Price={0}
+          searchResult={company}
         />
       ))}
     </div>
