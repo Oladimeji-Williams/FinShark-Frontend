@@ -2,6 +2,7 @@
 
 import { FC, JSX, useState } from 'react'
 import type { ChangeEvent, MouseEvent } from 'react'
+import { searchCompanies } from '../../../api'
 
 type Props = {}
 
@@ -15,6 +16,8 @@ const Search: FC<Props> = (): JSX.Element => {
         console.log("Search button clicked")
     }
   return (
+    console.log("Search component rendered"),
+    console.log(searchCompanies("AAPL")),
     <div className='search'>
         <input 
             type="text" 
