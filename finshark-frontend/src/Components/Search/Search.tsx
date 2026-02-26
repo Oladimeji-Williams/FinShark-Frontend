@@ -1,33 +1,26 @@
 "use client"
 
-import { FC, JSX, useState } from 'react'
+import { FC, JSX } from 'react'
 import type { ChangeEvent, MouseEvent } from 'react'
-import { searchCompanies } from '../../../api'
 
-type Props = {}
+type Props = {
+    search: string
+    handleChange: (event: ChangeEvent<HTMLInputElement>) => void
+    onClick: (event: MouseEvent<HTMLButtonElement>) => void
+}
 
-const Search: FC<Props> = (): JSX.Element => {
-    const [search, setSearch] = useState<string>('')
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value)
-        console.log(search)
-    }
-    const onClick = (_event: MouseEvent<HTMLButtonElement>) => {
-        console.log("Search button clicked")
-    }
-  return (
-    console.log("Search component rendered"),
-    console.log(searchCompanies("AAPL")),
-    <div className='search'>
-        <input 
-            type="text" 
-            placeholder="Search for a company..." 
-            value={search}
-            onChange={handleChange}
-        />
-        <button onClick={onClick}>Search</button>
-    </div>
-  )
+const Search: FC<Props> = ({ search, handleChange, onClick }): JSX.Element => {
+    return (
+        <div className='search'>
+            <input
+                type="text"
+                placeholder="Search for a company..."
+                value={search}
+                onChange={handleChange}
+            />
+            <button onClick={onClick}>Search</button>
+        </div>
+    )
 }
 
 export default Search
