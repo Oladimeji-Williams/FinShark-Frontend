@@ -6,11 +6,13 @@ import CardList from "@/Components/CardList/CardList";
 import Search from "@/Components/Search/Search";
 import { searchCompanies } from "../../api";
 import type { CompanySearch } from "@/company";
+import PortfolioList from "./Portfolio/PortfolioList/PortfolioList";
 
 const HomeClient = (): JSX.Element => {
   const [search, setSearch] = useState<string>("");
   const [companies, setCompanies] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string>("");
+  const [portfolioValues, setPortfolioValues] = useState<string[]>([]);
 
   const runSearch = useCallback(async (query: string) => {
     const result = await searchCompanies(query);
@@ -25,7 +27,12 @@ const HomeClient = (): JSX.Element => {
   }, []);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
+    const nextValue = event.target.value;
+    setSearch(nextValue);
+    if (!nextValue.trim()) {
+      setServerError("");
+      setCompanies([]);
+    }
   };
 
   const onSearchSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -39,11 +46,20 @@ const HomeClient = (): JSX.Element => {
     await runSearch(query);
   };
 
-  const onPortfolio = (event: SubmitEvent<HTMLFormElement>) => {
+  const onPortfolioCreate = (event: any) => {
     event.preventDefault();
+    const exists = portfolioValues.some((value) => value === event.target[0].value);
+    if (exists) {
+      console.log("Symbol already exists in portfolio");
+      return;
+    }
     const formData = new FormData(event.currentTarget);
     const symbol = formData.get("symbol") as string;
     console.log("Creating portfolio for symbol:", symbol);
+    const updatedPortfolioValues = [...portfolioValues, event.target[0].value];
+    setPortfolioValues(updatedPortfolioValues);
+
+
   }
 
   useEffect(() => {
@@ -53,8 +69,6 @@ const HomeClient = (): JSX.Element => {
   useEffect(() => {
     const query = search.trim();
     if (!query) {
-      setServerError("");
-      setCompanies([]);
       return;
     }
 
@@ -65,12 +79,14 @@ const HomeClient = (): JSX.Element => {
     return () => clearTimeout(debounce);
   }, [search, runSearch]);
 
+
   return (
-    <>
+    <div>
+      <PortfolioList portfolioValues={portfolioValues} />
       <Search search={search} handleSearchChange={handleSearchChange} onSearchSubmit={onSearchSubmit} />
       {serverError && <div className="error">{serverError}</div>}
-      <CardList companies={companies} onPortfolioCreate={onPortfolio} />
-    </>
+      <CardList companies={companies} onPortfolioCreate={onPortfolioCreate} />
+    </div>
   );
 };
 
