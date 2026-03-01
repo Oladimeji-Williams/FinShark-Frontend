@@ -1,8 +1,10 @@
 import React from 'react'
 import PortfolioCard from '../PortfolioCard/PortfolioCard';
+import type { SubmitEvent } from 'react'
 
 type Props = {
     portfolioValues: string[];
+    onPortfolioDelete: (event: SubmitEvent<HTMLFormElement>) => void;
 }
 
 const PortfolioList = (props: Props) => {
@@ -12,7 +14,7 @@ const PortfolioList = (props: Props) => {
         <ul>
             {props.portfolioValues.map((portfolioValue, index) => (
                 <li key={`${portfolioValue}-${index}`}>
-                    <PortfolioCard portfolioValue={portfolioValue} />
+                    <PortfolioCard portfolioValue={portfolioValue} onPortfolioDelete={props.onPortfolioDelete} />
                 </li>
             ))}
         </ul>

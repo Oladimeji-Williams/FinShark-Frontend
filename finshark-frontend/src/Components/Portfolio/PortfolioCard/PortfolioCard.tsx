@@ -1,14 +1,17 @@
 import React from 'react'
+import type { SubmitEvent } from 'react'
+import DeletePortfolio from '../DeletePortfolio/DeletePortfolio';
 
 type Props = {
     portfolioValue: string;
+    onPortfolioDelete: (event: SubmitEvent<HTMLFormElement>) => void;
 }
 
 const PortfolioCard = (props: Props) => {
   return (
     <div>
       <div>{props.portfolioValue}</div>
-      <button>x</button>
+      <DeletePortfolio onPortfolioDelete={props.onPortfolioDelete} onPortfolioValue={props.portfolioValue} />
     </div>
   )
 }

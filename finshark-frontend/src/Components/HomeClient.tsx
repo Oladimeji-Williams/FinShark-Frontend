@@ -46,20 +46,31 @@ const HomeClient = (): JSX.Element => {
     await runSearch(query);
   };
 
-  const onPortfolioCreate = (event: any) => {
+  const onPortfolioCreate = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const exists = portfolioValues.some((value) => value === event.target[0].value);
+    const formData = new FormData(event.currentTarget);
+    const symbol = formData.get("symbol") as string | null;
+    if (!symbol) return;
+
+    const exists = portfolioValues.some((value) => value === symbol);
     if (exists) {
       console.log("Symbol already exists in portfolio");
       return;
     }
-    const formData = new FormData(event.currentTarget);
-    const symbol = formData.get("symbol") as string;
     console.log("Creating portfolio for symbol:", symbol);
-    const updatedPortfolioValues = [...portfolioValues, event.target[0].value];
+    const updatedPortfolioValues = [...portfolioValues, symbol];
     setPortfolioValues(updatedPortfolioValues);
 
 
+  }
+  const onPortfolioDelete = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const symbol = formData.get("symbol") as string | null;
+    if (!symbol) return;
+    console.log("Deleting portfolio for symbol:", symbol);
+    const updatedPortfolioValues = portfolioValues.filter((value) => value !== symbol);
+    setPortfolioValues(updatedPortfolioValues);
   }
 
   useEffect(() => {
@@ -82,7 +93,7 @@ const HomeClient = (): JSX.Element => {
 
   return (
     <div>
-      <PortfolioList portfolioValues={portfolioValues} />
+      <PortfolioList portfolioValues={portfolioValues} onPortfolioDelete={onPortfolioDelete} />
       <Search search={search} handleSearchChange={handleSearchChange} onSearchSubmit={onSearchSubmit} />
       {serverError && <div className="error">{serverError}</div>}
       <CardList companies={companies} onPortfolioCreate={onPortfolioCreate} />
