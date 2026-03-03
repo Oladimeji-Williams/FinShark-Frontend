@@ -11,11 +11,22 @@ type Props = {
 
 const Search: FC<Props> = (props: Props): JSX.Element => {
     return (
-        <div className='search'>
-            <form onSubmit={props.onSearchSubmit}>
-                <input type="text" value={props.search} onChange={props.handleSearchChange} placeholder='Search for a company...'/>
+        <section className="relative w-full bg-gray-100">
+            <div className="w-full p-6 space-y-6">
+            <form
+                className="form relative flex flex-col w-full p-10 space-y-4 bg-[var(--color-dark-blue)] rounded-lg md:flex-row md:space-y-0 md:space-x-3"
+                onSubmit={props.onSearchSubmit}
+            >
+                <input
+                className="flex-1 p-3 border-2 rounded-lg placeholder-black focus:outline-none"
+                id="search-input"
+                placeholder="Search for a company..."
+                value={props.search}
+                onChange={props.handleSearchChange}
+                ></input>
             </form>
-        </div>
+            </div>
+        </section>
     )
 }
 

@@ -7,6 +7,8 @@ import Search from "@/Components/Search/Search";
 import { searchCompanies } from "../../api";
 import type { CompanySearch } from "@/company";
 import PortfolioList from "./Portfolio/PortfolioList/PortfolioList";
+import Hero from "./Hero/Hero";
+import Navbar from "./Navbar/Navbar";
 
 const HomeClient = (): JSX.Element => {
   const [search, setSearch] = useState<string>("");
@@ -92,7 +94,8 @@ const HomeClient = (): JSX.Element => {
 
 
   return (
-    <div>
+    <div className="w-full">
+      <Navbar />
       <PortfolioList portfolioValues={portfolioValues} onPortfolioDelete={onPortfolioDelete} />
       <Search search={search} handleSearchChange={handleSearchChange} onSearchSubmit={onSearchSubmit} />
       {serverError && <div className="error">{serverError}</div>}
