@@ -11,7 +11,7 @@ type Props = {
     data?: Company[];
 };
 
-const configs: TableConfig[] = [
+const config: TableConfig[] = [
     {
         label: "Year",
         render: (company: Company) => company.acceptedDate,
@@ -19,7 +19,7 @@ const configs: TableConfig[] = [
     {
         label: "Cost of Revenue",
         render: (company: Company) => company.costOfRevenue,
-    },
+    }
 ];
 
 const Table = ({ data = testIncomeStatementData }: Props) => {
@@ -28,14 +28,14 @@ const Table = ({ data = testIncomeStatementData }: Props) => {
         return (
 
             <tr key={`${company.cik}-${company.date}-${index}`} className="border-b">
-                {configs.map((config) => {
-                    return <td key={config.label} className="px-4 py-2 whitespace-nowrap text-sm font-normal text-gray-900">{config.render(company)}</td>
+                {config.map((row) => {
+                    return <td key={row.label} className="px-4 py-2 whitespace-nowrap text-sm font-normal text-gray-900">{row.render(company)}</td>
                 })}
             </tr>
         )
     })
-    const renderedHeader = configs.map((config) => {
-        return <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" key={config.label}>{config.label}</th>
+    const renderedHeader = config.map((row) => {
+        return <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" key={row.label}>{row.label}</th>
     })
     return (
         <div className="bg-white shadow overflow-hidden rounded-lg p-4 sm:p-6 xl:p-8">
