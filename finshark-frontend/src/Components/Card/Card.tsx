@@ -4,6 +4,7 @@ import './Card.css'
 import { CompanySearch } from '@/company';
 import type { SubmitEvent } from 'react';
 import CreatePortfolio from '../Portfolio/CreatePortfolio/CreatePortfolio';
+import { Link } from 'react-router-dom';
 
 type Props = {
     id: string;
@@ -18,9 +19,9 @@ const Card: React.FC<Props> = (props: Props): JSX.Element => {
       key={props.id}
       id={props.id}
     >
-      <h2 className="font-bold text-center text-black md:text-left">
+      <Link to={`/company/${props.searchResult.symbol}`} className="font-bold text-center text-black md:text-left">
         {props.searchResult.name} ({props.searchResult.symbol})
-      </h2>
+      </Link>
       <p className="text-black">{props.searchResult.currency}</p>
       <p className="font-bold text-black">
         {props.searchResult.exchangeShortName} - {props.searchResult.stockExchange}
