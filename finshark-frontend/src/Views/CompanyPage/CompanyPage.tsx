@@ -4,6 +4,9 @@ import { CompanyProfile } from "@/company";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCompanyProfile } from "../../../api";
+import Sidebar from "@/Components/Sidebar/Sidebar";
+import CompanyDashboard from "@/Components/CompanyDashboard/CompanyDashboard";
+import Tile from "@/Components/Tile/Tile";
 
 const CompanyPage = () => {
   const { ticker } = useParams();
@@ -29,15 +32,17 @@ const CompanyPage = () => {
     <div>
       {serverError && <p>{serverError}</p>}
       {company ? (
-        <div>
-          <h1>{company.companyName} ({company.symbol})</h1>
-          <p>{company.description}</p>
-          <p>Price: ${company.price}</p>
+<div className="w-full relative flex ct-docs-disable-sidebar-content overflow-x-hidden">
+        <Sidebar />
+        <CompanyDashboard>
+          <Tile title={company?.name || "Company Name"} subtitle={company?.ticker || "Ticker"} />
+        </CompanyDashboard>
+
         </div>
+
       ) : (
         <p>Company not found</p>
       )}  
-      Company: {ticker?.toUpperCase()}
     </div>
   )
 };
