@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 type Props = {
     children: React.ReactNode;
+    ticker: string;
 }
 
 const CompanyDashboard = (props: Props) => {
@@ -15,7 +16,7 @@ const CompanyDashboard = (props: Props) => {
 
                 <div>
                   <div className="flex flex-wrap">{props.children}</div>
-                  <div className="flex flex-wrap">{<Outlet />}</div>
+                  <div className="flex flex-wrap">{<Outlet context={props.ticker}/>}</div>
 
                   </div>
 

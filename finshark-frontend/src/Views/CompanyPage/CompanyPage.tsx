@@ -34,7 +34,7 @@ const CompanyPage = () => {
       {company ? (
 <div className="w-full relative flex ct-docs-disable-sidebar-content overflow-x-hidden">
         <Sidebar />
-        <CompanyDashboard>
+        <CompanyDashboard ticker={ticker!}>
           <Tile title={company.companyName || "Company Name"} subtitle={company.symbol || "Ticker"} />
         </CompanyDashboard>
 

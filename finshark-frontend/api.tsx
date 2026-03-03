@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { CompanyProfile, CompanySearch } from "@/company";
+import { CompanyKeyMetrics, CompanyProfile, CompanySearch } from "@/company";
 
 export const searchCompanies = async (request: string) => {
     try {
@@ -44,5 +44,20 @@ export const getCompanyQuote = async (ticker: string) => {
 
         console.error("Unexpected error fetching company quote:", error);
         return "An unexpected error occurred while fetching the company quote.";
+    }
+}
+
+export const getKeyMetrics = async (ticker: string) => {
+    try {
+        const response = await axios.get<CompanyKeyMetrics[]>(`https://financialmodelingprep.com/stable/ratios-ttm?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`);
+        return response.data[0];
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error fetching company key metrics:", error.message);
+            return error.message;
+        }
+
+        console.error("Unexpected error fetching company key metrics:", error);
+        return "An unexpected error occurred while fetching the company key metrics.";
     }
 }
