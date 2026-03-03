@@ -13,11 +13,13 @@ const Navbar = (props: Props) => {
             <Link to="/">
                 <Image src={logo} alt="FinShark logo" />
             </Link>
-            <div className="hidden font-bold lg:flex">
             <Link to="/home" className="text-black hover:text-darkBlue">
                 Dashboard
             </Link>
-            </div>
+            <Link to="/design-guide" className="text-black hover:text-darkBlue">
+                Design Guide
+            </Link>
+            
         </div>
         <div className="hidden lg:flex items-center space-x-6 text-back">
             <Link to="/search" className="hover:text-darkBlue">Search</Link>
