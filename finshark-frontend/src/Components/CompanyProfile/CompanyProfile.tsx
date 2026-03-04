@@ -105,6 +105,7 @@ const CompanyProfile = (props: Props) => {
 
 export default CompanyProfile;
 function formatLargeNonMonetaryNumber(marketCapTTM: number) {
+    if (typeof marketCapTTM !== "number" || !Number.isFinite(marketCapTTM)) return "N/A";
     if (marketCapTTM >= 1_000_000_000_000) return `${(marketCapTTM / 1_000_000_000_000).toFixed(2)}T`;
     if (marketCapTTM >= 1_000_000_000) return `${(marketCapTTM / 1_000_000_000).toFixed(2)}B`;
     if (marketCapTTM >= 1_000_000) return `${(marketCapTTM / 1_000_000).toFixed(2)}M`;

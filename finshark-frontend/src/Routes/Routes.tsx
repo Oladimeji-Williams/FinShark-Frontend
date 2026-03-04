@@ -6,6 +6,7 @@ import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import CompanyProfile from "@/Components/CompanyProfile/CompanyProfile";
 import IncomeStatement from "@/Components/IncomeStatement/IncomeStatement";
 import DesignGuideView from "@/Views/DesignGuideView/DesignGuideView";
+import BalanceSheet from "@/Components/BalanceSheet/BalanceSheet";
 
 export const appRoutes: RouteObject[] = [
     {
@@ -19,7 +20,8 @@ export const appRoutes: RouteObject[] = [
             {path: "company/:ticker", element: <CompanyPage />,
                 children: [
                     {path: "company-profile", element: <CompanyProfile />},
-                    {path: "income-statement", element: <IncomeStatement />}
+                    {path: "income-statement", element: <IncomeStatement />},
+                    {path: "balance-sheet", element: <BalanceSheet />}
                 ]
             }
         ]
