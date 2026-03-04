@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { CompanyKeyMetrics, CompanyProfile, CompanySearch } from "@/company";
+import { CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch } from "@/company";
 
 export const searchCompanies = async (request: string) => {
     try {
@@ -59,5 +59,26 @@ export const getKeyMetrics = async (ticker: string) => {
 
         console.error("Unexpected error fetching company key metrics:", error);
         return "An unexpected error occurred while fetching the company key metrics.";
+    }
+}
+
+export const getIncomeStatement = async (ticker: string) => {
+    try {
+        const response = await axios.get<CompanyIncomeStatement[]>(`https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=annual&limit=40&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 402) {
+                return "Your FMP plan does not include income statement access for this endpoint.";
+            }
+            if (error.response?.status === 403) {
+                return "Your API key is not authorized for income statement data (403).";
+            }
+            console.error("Axios error fetching company income statement:", error.message);
+            return error.message;
+        }
+
+        console.error("Unexpected error fetching company income statement:", error);
+        return "An unexpected error occurred while fetching the company income statement.";
     }
 }

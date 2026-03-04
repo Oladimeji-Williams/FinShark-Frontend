@@ -2,6 +2,7 @@ import { CompanyKeyMetrics } from '@/company'
 import DataTable from '@/Components/DataTable/DataTable'
 import RatioList from '@/Components/RatioList/RatioList'
 import Table from '@/Components/Table/Table'
+import { testIncomeStatementData } from '@/Components/Table/testData'
 import React from 'react'
 
 type Props = {}
@@ -86,6 +87,23 @@ const tableConfig = [
   },
 ];
 
+const incomeStatementTableConfig = [
+  {
+    label: "Date",
+    render: (company: (typeof testIncomeStatementData)[number]) => company.date,
+  },
+  {
+    label: "Revenue",
+    render: (company: (typeof testIncomeStatementData)[number]) =>
+      formatLargeNonMonetaryNumber(company.revenue),
+  },
+  {
+    label: "Cost Of Revenue",
+    render: (company: (typeof testIncomeStatementData)[number]) =>
+      formatLargeNonMonetaryNumber(company.costOfRevenue),
+  },
+];
+
 const DesignGuideView = (props: Props) => {
   return (
     <div>
@@ -93,14 +111,15 @@ const DesignGuideView = (props: Props) => {
         <h2>This is Finshark's design guide view. This is where we will house various design aspects of the app.</h2>
         <DataTable />
         <RatioList data={mockMetrics} config={tableConfig} />
-        <Table />
+        <Table data={testIncomeStatementData} config={incomeStatementTableConfig}/>
     </div>
   )
 }
 
 export default DesignGuideView
 
-function formatLargeNonMonetaryNumber(marketCapTTM: number) {
+function formatLargeNonMonetaryNumber(marketCapTTM?: number) {
+    if (typeof marketCapTTM !== "number" || !Number.isFinite(marketCapTTM)) return "N/A";
     if (marketCapTTM >= 1_000_000_000_000) return `${(marketCapTTM / 1_000_000_000_000).toFixed(2)}T`;
     if (marketCapTTM >= 1_000_000_000) return `${(marketCapTTM / 1_000_000_000).toFixed(2)}B`;
     if (marketCapTTM >= 1_000_000) return `${(marketCapTTM / 1_000_000).toFixed(2)}M`;
