@@ -31,6 +31,10 @@ const Sidebar = (props: Props) => {
                         <FaHome className="mr-2 text-blueGray-400 text-base" />
                         <h6 className='ml-3'>Balance Sheet</h6>
                     </Link>
+                    <Link to="cashflow-statement" className="flex md:min-w-full text-sm uppercase py-3 font-bold block text-blueGray-700 hover:text-blueGray-500 pt-1 pb-4 no-underline">
+                        <FaHome className="mr-2 text-blueGray-400 text-base" />
+                        <h6 className='ml-3'>Cashflow Statememnt</h6>
+                    </Link>
 
                 </div>
 

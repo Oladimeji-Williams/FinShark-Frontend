@@ -11,12 +11,12 @@ const RatioList = (props: Props) => {
     const renderedRows = props.config.map((row: any, index: number) => {
 
         return (
-            <li key={`${row.label}-${index}`} className='py-3 sm:py-4'>
+            <li key={index} className='py-3 sm:py-4'>
                 <div className="flex items-center space-x-4">
                     <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <div className="text-sm font-medium text-gray-900 truncate">
                             {row.label}
-                        </p>
+                        </div>
                         <p className="text-sm text-gray-500 truncate">
                             {row.subtitle}
                         </p>

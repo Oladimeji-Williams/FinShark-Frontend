@@ -10,31 +10,32 @@ export interface CompanyProfile {
   symbol: string;
   price: number;
   beta: number;
-  volAvg: number;
-  mktCap: number;
-  lastDiv: number;
+  marketCap: number;
+  lastDividend: number;
   range: string;
-  changes: number;
+  change: number;
+  changePercentage: number;
+  volume: number;
+  averageVolume: number;
   companyName: string;
   currency: string;
   cik: string;
   isin: string;
+  cusip: string;
+  exchangeFullName: string;
   exchange: string;
-  exchangeShortName: string;
   industry: string;
   website: string;
   description: string;
   ceo: string;
   sector: string;
-  counter: string;
+  country: string;
   fullTimeEmployees: string;
   phone: string;
   address: string;
   city: string;
   state: string;
   zip: string;
-  dcfDiff: number;
-  dcf: number;
   image: string;
   ipoDate: string;
   defaultImage: boolean;
@@ -42,6 +43,15 @@ export interface CompanyProfile {
   isActivelyTrading: boolean;
   isAdr: boolean;
   isFund: boolean;
+  // Legacy/v3 fields retained as optional for compatibility.
+  volAvg?: number;
+  mktCap?: number;
+  lastDiv?: number;
+  changes?: number;
+  exchangeShortName?: string;
+  counter?: string;
+  dcfDiff?: number;
+  dcf?: number;
 }
 
 export interface CompanyKeyRatios {
@@ -203,7 +213,7 @@ export interface CompanyBalanceSheet {
   finalLink: string;
 }
 
-export interface CompanyCashFlow {
+export interface CompanyCashflow {
   date: string;
   symbol: string;
   reportedCurrency: string;
