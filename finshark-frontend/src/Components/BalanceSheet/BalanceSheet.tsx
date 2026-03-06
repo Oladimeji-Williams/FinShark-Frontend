@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { CompanyBalanceSheet } from "@/company";
 import { useOutletContext } from "react-router-dom";
 import RatioList from "../RatioList/RatioList";
 import { getBalanceSheet } from "../../../api";
+import { testBalanceSheetData } from "../Table/testData";
+import { useProgressiveData } from "../../../hooks/useProgressiveData";
+import TableSkeleton from "../TableSkeleton/TableSkeleton";
 
 type Props = {};
 
-const config = [
+const tableConfig = [
   {
     label: <div className="font-bold">Total Assets</div>,
     render: (company: CompanyBalanceSheet) =>
@@ -76,36 +79,57 @@ const config = [
 
 const BalanceSheet = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [balanceSheet, setBalanceSheet] = useState<CompanyBalanceSheet | null>(null);
   const [serverError, setServerError] = useState<string>("");
+  const [fallbackNotice, setFallbackNotice] = useState<string>("");
 
-  useEffect(() => {
-    const getCompanyData = async () => {
-      const value = await getBalanceSheet(ticker);
-      if (typeof value === "string") {
-        setServerError(value);
-        setBalanceSheet(null);
-        return;
-      }
-      if (value.length === 0) {
-        setServerError(`No balance sheet data available for ${ticker}.`);
-        setBalanceSheet(null);
-        return;
-      }
+  const balanceSheetLoader = useCallback(async () => {
+    const value = await getBalanceSheet(ticker);
 
+    if (typeof value === "string") {
       setServerError("");
-      setBalanceSheet(value[0]);
-    };
-    void getCompanyData();
+      setFallbackNotice("Showing fallback data because live balance sheet data is unavailable.");
+      return [testBalanceSheetData[0] as CompanyBalanceSheet];
+    }
+
+    if (value.length === 0) {
+      setServerError(`No balance sheet data available for ${ticker}.`);
+      setFallbackNotice("");
+      return [];
+    }
+
+    setServerError("");
+    setFallbackNotice("");
+    return [value[0]];
   }, [ticker]);
+
+  const {
+    data: balanceSheetRows,
+    loading,
+    error: progressiveError,
+  } = useProgressiveData<CompanyBalanceSheet>({
+    loader: balanceSheetLoader,
+    chunkSize: 1,
+    chunkDelayMs: 0,
+    enabled: Boolean(ticker),
+  });
+
+  const balanceSheet = balanceSheetRows[0] ?? null;
 
   return (
     <>
-      {serverError && <p>{serverError}</p>}
+      {serverError && !balanceSheet && <p>{serverError}</p>}
+      {progressiveError && !balanceSheet && <p>{progressiveError}</p>}
       {balanceSheet ? (
-        <RatioList config={config} data={balanceSheet} />
-      ) : !serverError ? (
-        <p>Loading balance sheet data...</p>
+        <div>
+          {fallbackNotice && (
+            <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+              {fallbackNotice}
+            </p>
+          )}
+          <RatioList config={tableConfig} data={balanceSheet} />
+        </div>
+      ) : loading ? (
+        <TableSkeleton />
       ) : null}
     </>
   );

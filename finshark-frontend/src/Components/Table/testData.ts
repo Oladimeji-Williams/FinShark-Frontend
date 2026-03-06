@@ -40,6 +40,63 @@ export const TestDataCompany = [
   },
 ];
 
+export const testBalanceSheetData = [
+  {
+    date: "2022-09-24",
+    symbol: "AAPL",
+    totalAssets: 352755000000,
+    totalCurrentAssets: 135405000000,
+    cashAndCashEquivalents: 23646000000,
+    propertyPlantEquipmentNet: 42117000000,
+    intangibleAssets: 0,
+    longTermDebt: 98959000000,
+    otherCurrentLiabilities: 60845000000,
+    totalLiabilities: 302083000000,
+    totalCurrentLiabilities: 153982000000,
+    otherLiabilities: 49142000000,
+    totalStockholdersEquity: 50672000000,
+    retainedEarnings: -3068000000,
+  },
+];
+
+export const testCashflowStatementData = [
+  {
+    date: "2022-09-24",
+    symbol: "AAPL",
+    operatingCashFlow: 122151000000,
+    netCashUsedForInvestingActivites: -22354000000,
+    netCashUsedProvidedByFinancingActivities: -110749000000,
+    cashAtEndOfPeriod: 24977000000,
+    capitalExpenditure: -10708000000,
+    commonStockIssued: 0,
+    freeCashFlow: 111443000000,
+  },
+  {
+    date: "2021-09-25",
+    symbol: "AAPL",
+    operatingCashFlow: 104038000000,
+    netCashUsedForInvestingActivites: -14545000000,
+    netCashUsedProvidedByFinancingActivities: -93353000000,
+    cashAtEndOfPeriod: 35929000000,
+    capitalExpenditure: -11085000000,
+    commonStockIssued: 0,
+    freeCashFlow: 92953000000,
+  },
+];
+
+export const testCompanyKeyMetricsData = {
+  marketCapTTM: 2400000000000,
+  currentRatioTTM: 0.94,
+  roeTTM: 1.47,
+  returnOnTangibleAssetsTTM: 0.29,
+  freeCashFlowPerShareTTM: 6.74,
+  bookValuePerShareTTM: 3.85,
+  dividendYieldTTM: 0.0056,
+  capexPerShareTTM: 0.62,
+  grahamNumberTTM: 24.92,
+  peRatioTTM: 27.3,
+};
+
 export const testIncomeStatementData = [
   {
     date: "2022-09-24",

@@ -1,8 +1,11 @@
 import { CompanyKeyMetrics } from "@/company";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { getKeyMetrics } from "../../../api";
 import RatioList from "../RatioList/RatioList";
+import { testCompanyKeyMetricsData } from "../Table/testData";
+import { useProgressiveData } from "../../../hooks/useProgressiveData";
+import TableSkeleton from "../TableSkeleton/TableSkeleton";
 
 type Props = {};
 
@@ -77,27 +80,58 @@ const tableConfig = [
 
 const CompanyProfile = (props: Props) => {
     const ticker = useOutletContext<string>();
-    const [companyData, setCompanyData] = useState<CompanyKeyMetrics | null>(null);
-    useEffect(() => {
-        const getCompanyKeyMetrics = async () => {
-            const data = await getKeyMetrics(ticker);
-            if (typeof data === "string") {
-              setCompanyData(null);
-              return;
-            }
-            setCompanyData(data ?? null);
-        };
-        void getCompanyKeyMetrics();
-    }, [ticker])
+    const [serverError, setServerError] = useState<string>("");
+    const [fallbackNotice, setFallbackNotice] = useState<string>("");
+
+    const keyMetricsLoader = useCallback(async () => {
+      const data = await getKeyMetrics(ticker);
+
+      if (typeof data === "string") {
+        setServerError("");
+        setFallbackNotice("Showing fallback data because live key metrics data is unavailable.");
+        return [testCompanyKeyMetricsData as CompanyKeyMetrics];
+      }
+
+      if (!data) {
+        setServerError(`No key metrics data available for ${ticker}.`);
+        setFallbackNotice("");
+        return [];
+      }
+
+      setServerError("");
+      setFallbackNotice("");
+      return [data];
+    }, [ticker]);
+
+    const {
+      data: companyDataRows,
+      loading,
+      error: progressiveError,
+    } = useProgressiveData<CompanyKeyMetrics>({
+      loader: keyMetricsLoader,
+      chunkSize: 1,
+      chunkDelayMs: 0,
+      enabled: Boolean(ticker),
+    });
+
+    const companyData = companyDataRows[0] ?? null;
+
   return (
     <>
+    {serverError && !companyData && <p>{serverError}</p>}
+    {progressiveError && !companyData && <p>{progressiveError}</p>}
     {companyData ? (
         <div>
+            {fallbackNotice && (
+              <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                {fallbackNotice}
+              </p>
+            )}
             <h1>{ticker}</h1>
             <RatioList data={companyData} config={tableConfig}/>
         </div>
     ) : (
-        <p>Loading...</p>
+        loading ? <TableSkeleton /> : <p>Loading...</p>
     )}
     </>
   );
