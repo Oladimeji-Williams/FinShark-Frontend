@@ -8,6 +8,7 @@ import {
     CompanyKeyMetrics,
     CompanyProfile,
     CompanySearch,
+    CompanyTenK,
 } from "@/company"
 
 export const searchCompanies = async (request: string) => {
@@ -171,5 +172,29 @@ export const getComparisonData = async (ticker: string) => {
 
         console.error("Unexpected error fetching company peer comparison data:", error)
         return "An unexpected error occurred while fetching peer comparison data."
+    }
+}
+
+
+export const getTenK = async (ticker: string) => {
+    try {
+        const response = await axios.get<CompanyTenK[]>(
+            `https://financialmodelingprep.com/stable/sec-filings-company-search/symbol?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+        )
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 402) {
+                return "Your FMP plan does not include SEC filings access for this endpoint."
+            }
+            if (error.response?.status === 403) {
+                return "Your API key is not authorized for SEC filings data (403)."
+            }
+            console.error("Axios error fetching company SEC filings data:", error.message)
+            return error.message
+        }
+
+        console.error("Unexpected error fetching company SEC filings data:", error)
+        return "An unexpected error occurred while fetching SEC filings data."
     }
 }
