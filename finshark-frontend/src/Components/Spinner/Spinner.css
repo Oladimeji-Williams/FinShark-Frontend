@@ -1,0 +1,7 @@
+.loading-spinner {
+    display: flex;
+    min-height: 160px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}

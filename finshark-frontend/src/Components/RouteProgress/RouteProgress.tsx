@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
 const RouteProgress = () => {
-  return null;
-};
+    return null
+}
 
-export default RouteProgress;
+export default RouteProgress

@@ -1,10 +1,9 @@
-"use client";
+"use client"
 
-import Hero from "@/Components/Hero/Hero";
+import Hero from "@/Components/Hero/Hero"
 
 const HomePage = () => {
-  return <Hero />;
-};
+    return <Hero />
+}
 
-export default HomePage;
-
+export default HomePage
