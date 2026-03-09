@@ -2,7 +2,7 @@ import { useCallback, useState } from "react"
 import { CompanyBalanceSheet } from "@/company"
 import { useOutletContext } from "react-router-dom"
 import RatioList from "../RatioList/RatioList"
-import { getBalanceSheet } from "../../../api"
+import { getBalanceSheet } from "@/lib/fmpClient"
 import { testBalanceSheetData } from "../Table/testData"
 import TableSkeleton from "../TableSkeleton/TableSkeleton"
 import { useProgressiveData } from "../../../hooks/UseProgressiveData"
@@ -55,7 +55,7 @@ const BalanceSheet = () => {
             {balanceSheet ? (
                 <div>
                     {fallbackNotice && (
-                        <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                        <p className="mb-3 rounded border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-sm text-amber-700 dark:text-amber-300">
                             {fallbackNotice}
                         </p>
                     )}

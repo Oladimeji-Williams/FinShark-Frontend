@@ -1,5 +1,17 @@
 import type { CompanyKeyMetrics } from "@/company"
 import type { RatioListConfig } from "../RatioList/RatioList"
+import { formatLargeNonMonetaryNumber, formatRatio } from "@/Helpers/NumberFormatting"
+
+const pickFinite = (...values: Array<number | undefined>): number => {
+    const value = values.find((entry) => Number.isFinite(entry))
+    return typeof value === "number" ? value : Number.NaN
+}
+
+type KeyMetricsWithFallbacks = CompanyKeyMetrics & {
+    returnOnAssetsTTM?: number
+    returnOnEquityTTM?: number
+    priceEarningsRatioTTM?: number
+}
 
 export const companyProfileRatioConfig: RatioListConfig<CompanyKeyMetrics>[] = [
     {
@@ -14,13 +26,21 @@ export const companyProfileRatioConfig: RatioListConfig<CompanyKeyMetrics>[] = [
     },
     {
         label: "Return On Equity",
-        render: (company) => formatRatio(company.roeTTM),
+        render: (company) => {
+            const metrics = company as KeyMetricsWithFallbacks
+            return formatRatio(pickFinite(metrics.roeTTM, metrics.returnOnEquityTTM))
+        },
         subtitle:
             "Return on equity is the measure of a company's net income divided by its shareholder's equity",
     },
     {
         label: "Return On Assets",
-        render: (company) => formatRatio(company.returnOnTangibleAssetsTTM),
+        render: (company) => {
+            const metrics = company as KeyMetricsWithFallbacks
+            return formatRatio(
+                pickFinite(metrics.returnOnTangibleAssetsTTM, metrics.returnOnAssetsTTM)
+            )
+        },
         subtitle: "Return on assets is the measure of how effective a company is using its assets",
     },
     {
@@ -52,20 +72,11 @@ export const companyProfileRatioConfig: RatioListConfig<CompanyKeyMetrics>[] = [
     },
     {
         label: "PE Ratio",
-        render: (company) => formatRatio(company.peRatioTTM),
+        render: (company) => {
+            const metrics = company as KeyMetricsWithFallbacks
+            return formatRatio(pickFinite(metrics.peRatioTTM, metrics.priceEarningsRatioTTM))
+        },
         subtitle:
             "This is the upperbouind of the price range that a defensive investor should pay for a stock",
     },
 ]
-
-function formatLargeNonMonetaryNumber(value: number) {
-    if (typeof value !== "number" || !Number.isFinite(value)) return "N/A"
-    if (value >= 1_000_000_000_000) return `${(value / 1_000_000_000_000).toFixed(2)}T`
-    if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`
-    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`
-    return value.toLocaleString()
-}
-
-function formatRatio(value: number) {
-    return Number.isFinite(value) ? value.toFixed(2) : "N/A"
-}

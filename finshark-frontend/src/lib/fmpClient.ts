@@ -4,6 +4,7 @@ import {
     CompanyBalanceSheet,
     CompanyCashflow,
     CompanyComparisonData,
+    CompanyHistoricalDividend,
     CompanyIncomeStatement,
     CompanyKeyMetrics,
     CompanyProfile,
@@ -11,19 +12,43 @@ import {
     CompanyTenK,
 } from "@/company"
 
+interface CompanyDiscountedCashFlow {
+    dcf?: number | string
+}
+
+const fmpEndpoint = (path: string, params: Record<string, string> = {}) => {
+    const searchParams = new URLSearchParams(params)
+    const query = searchParams.toString()
+    return query ? `/api/fmp/${path}?${query}` : `/api/fmp/${path}`
+}
+
+const parseFiniteNumber = (value: unknown): number | undefined => {
+    if (typeof value === "number" && Number.isFinite(value)) return value
+    if (typeof value === "string") {
+        const parsed = Number(value)
+        if (Number.isFinite(parsed)) return parsed
+    }
+    return undefined
+}
+
+const extractDcfValue = (
+    payload: CompanyDiscountedCashFlow[] | CompanyDiscountedCashFlow
+): number | undefined => {
+    const point = Array.isArray(payload) ? payload[0] : payload
+    return parseFiniteNumber(point?.dcf)
+}
+
 export const searchCompanies = async (request: string) => {
     try {
         const response = await axios.get<CompanySearch[]>(
-            `https://financialmodelingprep.com/stable/search-symbol?query=${request}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("search-symbol", { query: request })
         )
         return response.data
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error searching for companies:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error searching for companies:", error)
         return "An unexpected error occurred while searching for companies."
     }
 }
@@ -31,50 +56,80 @@ export const searchCompanies = async (request: string) => {
 export const getCompanyProfile = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyProfile[]>(
-            `https://financialmodelingprep.com/stable/profile?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("profile", { symbol: ticker })
         )
         return response.data[0]
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error fetching company profile:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company profile:", error)
         return "An unexpected error occurred while fetching the company profile."
     }
 }
 
 export const getCompanyQuote = async (ticker: string) => {
     try {
-        const response = await axios.get(
-            `https://financialmodelingprep.com/stable/quote?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
-        )
+        const response = await axios.get(fmpEndpoint("quote", { symbol: ticker }))
         return response.data[0]
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error fetching company quote:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company quote:", error)
         return "An unexpected error occurred while fetching the company quote."
+    }
+}
+
+export const getDiscountedCashFlow = async (ticker: string) => {
+    try {
+        const stableResponse = await axios.get<
+            CompanyDiscountedCashFlow[] | CompanyDiscountedCashFlow
+        >(fmpEndpoint("discounted-cash-flow", { symbol: ticker }))
+        const stableDcf = extractDcfValue(stableResponse.data)
+        if (Number.isFinite(stableDcf)) {
+            return stableDcf
+        }
+    } catch {
+        // Fall through to v3 endpoint for backward compatibility.
+    }
+
+    try {
+        const v3Response = await axios.get<CompanyDiscountedCashFlow[]>(
+            fmpEndpoint("discounted-cash-flow-v3", { symbol: ticker })
+        )
+        const v3Dcf = extractDcfValue(v3Response.data)
+        if (Number.isFinite(v3Dcf)) {
+            return v3Dcf
+        }
+        return "Discounted cashflow data is unavailable for this ticker."
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            return error.message
+        }
+
+        return "An unexpected error occurred while fetching discounted cashflow data."
     }
 }
 
 export const getKeyMetrics = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyKeyMetrics[]>(
-            `https://financialmodelingprep.com/stable/ratios-ttm?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("key-metrics-ttm", { symbol: ticker })
         )
-        return response.data[0]
+        if (response.data?.[0]) {
+            return response.data[0]
+        }
+
+        const ratiosFallback = await axios.get<CompanyKeyMetrics[]>(
+            fmpEndpoint("ratios-ttm", { symbol: ticker })
+        )
+        return ratiosFallback.data?.[0]
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error fetching company key metrics:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company key metrics:", error)
         return "An unexpected error occurred while fetching the company key metrics."
     }
 }
@@ -82,7 +137,7 @@ export const getKeyMetrics = async (ticker: string) => {
 export const getIncomeStatement = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyIncomeStatement[]>(
-            `https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=annual&limit=40&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("income-statement", { symbol: ticker, period: "annual", limit: "40" })
         )
         return response.data
     } catch (error) {
@@ -93,11 +148,9 @@ export const getIncomeStatement = async (ticker: string) => {
             if (error.response?.status === 403) {
                 return "Your API key is not authorized for income statement data (403)."
             }
-            console.error("Axios error fetching company income statement:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company income statement:", error)
         return "An unexpected error occurred while fetching the company income statement."
     }
 }
@@ -105,7 +158,7 @@ export const getIncomeStatement = async (ticker: string) => {
 export const getBalanceSheet = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyBalanceSheet[]>(
-            `https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("balance-sheet-statement", { symbol: ticker })
         )
         return response.data
     } catch (error) {
@@ -116,11 +169,9 @@ export const getBalanceSheet = async (ticker: string) => {
             if (error.response?.status === 403) {
                 return "Your API key is not authorized for balance sheet data (403)."
             }
-            console.error("Axios error fetching company balance sheet:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company balance sheet:", error)
         return "An unexpected error occurred while fetching the company balance sheet."
     }
 }
@@ -128,7 +179,7 @@ export const getBalanceSheet = async (ticker: string) => {
 export const getCashflowStatement = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyCashflow[]>(
-            `https://financialmodelingprep.com/stable/cash-flow-statement?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("cash-flow-statement", { symbol: ticker })
         )
         return response.data
     } catch (error) {
@@ -139,11 +190,9 @@ export const getCashflowStatement = async (ticker: string) => {
             if (error.response?.status === 403) {
                 return "Your API key is not authorized for cashflow statement data (403)."
             }
-            console.error("Axios error fetching company cashflow statement:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company cashflow statement:", error)
         return "An unexpected error occurred while fetching the company cashflow statement."
     }
 }
@@ -151,7 +200,7 @@ export const getCashflowStatement = async (ticker: string) => {
 export const getComparisonData = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyComparisonData>(
-            `https://financialmodelingprep.com/stable/stock-peers?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("stock-peers", { symbol: ticker })
         )
         const payload = response.data
         if (Array.isArray(payload)) {
@@ -166,20 +215,17 @@ export const getComparisonData = async (ticker: string) => {
             if (error.response?.status === 403) {
                 return "Your API key is not authorized for peer comparison data (403)."
             }
-            console.error("Axios error fetching company peer comparison data:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company peer comparison data:", error)
         return "An unexpected error occurred while fetching peer comparison data."
     }
 }
 
-
 export const getTenK = async (ticker: string) => {
     try {
         const response = await axios.get<CompanyTenK[]>(
-            `https://financialmodelingprep.com/stable/sec-filings-company-search/symbol?symbol=${ticker}&apikey=${process.env.NEXT_PUBLIC_FMP_API_KEY}`
+            fmpEndpoint("sec-filings-search-symbol", { symbol: ticker })
         )
         return response.data
     } catch (error) {
@@ -190,11 +236,24 @@ export const getTenK = async (ticker: string) => {
             if (error.response?.status === 403) {
                 return "Your API key is not authorized for SEC filings data (403)."
             }
-            console.error("Axios error fetching company SEC filings data:", error.message)
             return error.message
         }
 
-        console.error("Unexpected error fetching company SEC filings data:", error)
         return "An unexpected error occurred while fetching SEC filings data."
+    }
+}
+
+export const getHistoricalDividends = async (ticker: string) => {
+    try {
+        const response = await axios.get<CompanyHistoricalDividend>(
+            fmpEndpoint("historical-dividends", { symbol: ticker })
+        )
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            return error.message
+        }
+
+        return "An unexpected error occurred while fetching historical dividends data."
     }
 }

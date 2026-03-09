@@ -1,4 +1,5 @@
 import type { CompanyIncomeStatement } from "@/company"
+import { formatLargeMonetaryNumber, formatRatio } from "@/Helpers/NumberFormatting"
 
 export type IncomeStatementTableColumn = {
     label: string
@@ -60,13 +61,3 @@ export const incomeStatementTableConfig: IncomeStatementTableColumn[] = [
     },
 ]
 
-function formatLargeMonetaryNumber(value: number) {
-    if (value >= 1_000_000_000_000) return `${(value / 1_000_000_000_000).toFixed(2)}T`
-    if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`
-    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`
-    return value.toLocaleString()
-}
-
-function formatRatio(value: number) {
-    return Number.isFinite(value) ? value.toFixed(2) : "N/A"
-}

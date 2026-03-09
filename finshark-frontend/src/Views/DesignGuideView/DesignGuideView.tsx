@@ -3,6 +3,7 @@ import DataTable from "@/Components/DataTable/DataTable"
 import RatioList from "@/Components/RatioList/RatioList"
 import type { RatioListConfig } from "@/Components/RatioList/RatioList"
 import Table from "@/Components/Table/Table"
+import type { TableConfig } from "@/Components/Table/Table"
 import { testIncomeStatementData } from "@/Components/Table/testData"
 import React from "react"
 
@@ -75,17 +76,20 @@ const tableConfig: RatioListConfig<CompanyKeyMetrics>[] = [
     },
 ]
 
-const incomeStatementTableConfig = [
+const incomeStatementTableConfig: TableConfig<(typeof testIncomeStatementData)[number]>[] = [
     {
+        key: "date",
         label: "Date",
         render: (company: (typeof testIncomeStatementData)[number]) => company.date,
     },
     {
+        key: "revenue",
         label: "Revenue",
         render: (company: (typeof testIncomeStatementData)[number]) =>
             formatLargeNonMonetaryNumber(company.revenue),
     },
     {
+        key: "costOfRevenue",
         label: "Cost Of Revenue",
         render: (company: (typeof testIncomeStatementData)[number]) =>
             formatLargeNonMonetaryNumber(company.costOfRevenue),

@@ -15,18 +15,18 @@ type Props = {
 const Card: React.FC<Props> = (props: Props): JSX.Element => {
     return (
         <div
-            className="flex flex-col items-center justify-between w-full p-6 bg-slate-100 rounded-lg md:flex-row"
+            className="flex flex-col items-center justify-between w-full p-6 bg-slate-100 dark:bg-gray-700 rounded-lg md:flex-row transition-colors"
             key={props.id}
             id={props.id}
         >
             <Link
                 to={`/company/${props.searchResult.symbol}/company-profile`}
-                className="font-bold text-center text-black md:text-left"
+                className="font-bold text-center text-black dark:text-gray-100 md:text-left transition-colors"
             >
                 {props.searchResult.name} ({props.searchResult.symbol})
             </Link>
-            <p className="text-black">{props.searchResult.currency}</p>
-            <p className="font-bold text-black">
+            <p className="text-black dark:text-gray-300">{props.searchResult.currency}</p>
+            <p className="font-bold text-black dark:text-gray-300">
                 {props.searchResult.exchangeShortName} - {props.searchResult.stockExchange}
             </p>
             <CreatePortfolio

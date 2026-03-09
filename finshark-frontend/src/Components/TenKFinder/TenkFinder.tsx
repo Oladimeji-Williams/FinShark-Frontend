@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { CompanyTenK } from "@/company"
-import { getTenK } from "../../../api"
+import { getTenK } from "@/lib/fmpClient"
 import Spinner from "../Spinner/Spinner"
 import TenKFinderItem from "./TenKFinderItem/TenKFinderItem"
 
@@ -33,9 +33,14 @@ const TenkFinder = ({ ticker }: Props) => {
         void fetchTenKData()
     }, [ticker])
 
-    if (serverError) return <p>{serverError}</p>
+    if (serverError) return <p className="text-red-600 dark:text-red-400 m-4">{serverError}</p>
     if (loading) return <Spinner />
-    if (!tenKData.length) return <p className="m-4 text-sm text-gray-500">No 10-K filings available.</p>
+    if (!tenKData.length)
+        return (
+            <p className="m-4 text-sm text-gray-500 dark:text-gray-400">
+                No 10-K filings available.
+            </p>
+        )
 
     return (
         <div className="inline-flex rounded-md shadow-sm m-4 flex-wrap gap-2">

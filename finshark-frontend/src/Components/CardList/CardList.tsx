@@ -10,7 +10,11 @@ type Props = {
 
 const CardList: React.FC<Props> = (props: Props): JSX.Element => {
     if (props.companies.length === 0) {
-        return <p className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">No results!</p>
+        return (
+            <p className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl text-gray-900 dark:text-gray-100">
+                No results!
+            </p>
+        )
     }
 
     return (

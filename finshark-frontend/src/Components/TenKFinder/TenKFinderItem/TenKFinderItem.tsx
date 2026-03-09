@@ -10,7 +10,7 @@ const TenKFinderItem = (props: Props) => {
     return (
         <Link
             to={`/company/${props.tenK.symbol}/tenk/${props.tenK.fillingDate}`}
-            className="inline-flex items-center p-4 text-md text-white bg-lightGreen rounded-md"
+            className="inline-flex items-center p-4 text-md text-white dark:text-gray-900 bg-lightGreen dark:bg-lightGreen/90 rounded-md hover:bg-green-600 dark:hover:bg-lightGreen transition-colors"
             reloadDocument
         >
             10-K - {props.tenK.symbol} - {filingYear}

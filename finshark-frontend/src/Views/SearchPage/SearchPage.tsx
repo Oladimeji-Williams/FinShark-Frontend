@@ -2,7 +2,7 @@
 
 import type { CompanySearch } from "@/company"
 import { useCallback, useEffect, useState } from "react"
-import { searchCompanies } from "../../../api"
+import { searchCompanies } from "@/lib/fmpClient"
 import type { ChangeEvent, SubmitEvent } from "react"
 import PortfolioList from "@/Components/Portfolio/PortfolioList/PortfolioList"
 import Search from "@/Components/Search/Search"
@@ -84,7 +84,9 @@ const SearchPage = () => {
                 handleSearchChange={handleSearchChange}
                 onSearchSubmit={onSearchSubmit}
             />
-            {serverError && <div className="error">{serverError}</div>}
+            {serverError && (
+                <div className="error text-red-600 dark:text-red-400 m-4">{serverError}</div>
+            )}
             <CardList companies={companies} onPortfolioCreate={onPortfolioCreate} />
         </div>
     )

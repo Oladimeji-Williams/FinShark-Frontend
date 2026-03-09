@@ -1,5 +1,6 @@
 import type { CompanyBalanceSheet } from "@/company"
 import type { RatioListConfig } from "../RatioList/RatioList"
+import { formatLargeMonetaryNumber } from "@/Helpers/NumberFormatting"
 
 export const balanceSheetRatioConfig: RatioListConfig<CompanyBalanceSheet>[] = [
     {
@@ -56,10 +57,3 @@ export const balanceSheetRatioConfig: RatioListConfig<CompanyBalanceSheet>[] = [
     },
 ]
 
-function formatLargeMonetaryNumber(value: number) {
-    if (!Number.isFinite(value)) return "N/A"
-    if (value >= 1_000_000_000_000) return `${(value / 1_000_000_000_000).toFixed(2)}T`
-    if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`
-    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`
-    return value.toLocaleString()
-}

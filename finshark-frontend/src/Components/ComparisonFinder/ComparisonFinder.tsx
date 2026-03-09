@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getComparisonData } from "../../../api"
+import { getComparisonData } from "@/lib/fmpClient"
 import type { CompanyComparisonData } from "@/company"
 import ComparisonFinderItem from "./ComparisonFinderItem/ComparisonFinderItem"
 
@@ -32,10 +32,19 @@ const ComparisonFinder = ({ ticker }: Props) => {
         void fetchComparisonData()
     }, [ticker])
 
-    if (serverError) return <p>{serverError}</p>
-    if (loading) return <p className="m-4 text-sm text-gray-500">Loading comparison peers...</p>
+    if (serverError) return <p className="text-red-600 dark:text-red-400 m-4">{serverError}</p>
+    if (loading)
+        return (
+            <p className="m-4 text-sm text-gray-500 dark:text-gray-400">
+                Loading comparison peers...
+            </p>
+        )
     if (!comparisonData?.peersList?.length)
-        return <p className="m-4 text-sm text-gray-500">No comparison peers available.</p>
+        return (
+            <p className="m-4 text-sm text-gray-500 dark:text-gray-400">
+                No comparison peers available.
+            </p>
+        )
 
     return (
         <div className="inline-flex rounded-md shadow-sm m-4">

@@ -1,7 +1,7 @@
 import { CompanyKeyMetrics } from "@/company"
 import { useCallback, useState } from "react"
 import { useOutletContext } from "react-router-dom"
-import { getKeyMetrics } from "../../../api"
+import { getKeyMetrics } from "@/lib/fmpClient"
 import RatioList from "../RatioList/RatioList"
 import { testCompanyKeyMetricsData } from "../Table/testData"
 import { useProgressiveData } from "../../../hooks/UseProgressiveData"
@@ -58,7 +58,6 @@ const CompanyProfile = () => {
                             {fallbackNotice}
                         </p>
                     )}
-                    <h1>{ticker}</h1>
                     <RatioList data={companyData} config={companyProfileRatioConfig} />
                 </div>
             ) : loading ? (

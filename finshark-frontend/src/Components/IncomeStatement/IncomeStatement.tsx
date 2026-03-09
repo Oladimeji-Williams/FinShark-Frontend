@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { CompanyIncomeStatement } from "@/company"
-import { getIncomeStatement } from "../../../api"
+import { getIncomeStatement } from "@/lib/fmpClient"
 import { testIncomeStatementData } from "../Table/testData"
 import { useProgressiveData } from "../../../hooks/UseProgressiveData"
 import TableSkeleton from "../TableSkeleton/TableSkeleton"
@@ -30,12 +30,12 @@ const IncomeStatementRow = ({
     return (
         <div
             style={{ ...style, display: "grid", gridTemplateColumns }}
-            className="border-b border-gray-200"
+            className="border-b border-gray-200 dark:border-gray-700"
         >
             {tableConfig.map((column) => (
                 <div
                     key={column.label}
-                    className="px-4 py-2 whitespace-nowrap text-sm font-normal text-gray-900"
+                    className="px-4 py-2 whitespace-nowrap text-sm font-normal text-gray-900 dark:text-gray-100"
                 >
                     {column.render(company)}
                 </div>
@@ -89,14 +89,14 @@ const IncomeStatement = () => {
             {loading && incomeStatement.length === 0 ? (
                 <TableSkeleton />
             ) : incomeStatement.length > 0 ? (
-                <div className="bg-white shadow overflow-hidden rounded-lg p-4 sm:p-6 xl:p-8">
+                <div className="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg p-4 sm:p-6 xl:p-8 transition-colors">
                     {fallbackNotice && (
-                        <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                        <p className="mb-3 rounded border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-sm text-amber-700 dark:text-amber-300">
                             {fallbackNotice}
                         </p>
                     )}
                     {loading && total > 0 && (
-                        <p className="mb-3 text-sm text-gray-500">
+                        <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
                             Streaming rows: {incomeStatement.length}/{total}
                         </p>
                     )}
@@ -104,12 +104,12 @@ const IncomeStatement = () => {
                         <div style={{ width: tableWidth }}>
                             <div
                                 style={{ display: "grid", gridTemplateColumns }}
-                                className="border-b border-gray-200"
+                                className="border-b border-gray-200 dark:border-gray-700"
                             >
                                 {incomeStatementTableConfig.map((column) => (
                                     <div
                                         key={column.label}
-                                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                                     >
                                         {column.label}
                                     </div>

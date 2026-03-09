@@ -17,12 +17,14 @@ const RatioList = <T,>({ config, data }: RatioListProps<T>) => {
             <li key={index} className="py-3 sm:py-4">
                 <div className="flex items-center space-x-4">
                     <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-gray-900 truncate">
+                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                             {row.label}
                         </div>
-                        <p className="text-sm text-gray-500 truncate">{row.subtitle}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                            {row.subtitle}
+                        </p>
                     </div>
-                    <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                    <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-gray-100">
                         {row.render(data)}
                     </div>
                 </div>
@@ -31,8 +33,8 @@ const RatioList = <T,>({ config, data }: RatioListProps<T>) => {
     })
 
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg ml-4 mt-4 mb-4 p-4 sm:p-6 lg:p-8 h-full">
-            <ul className="divide-y divide-gray-200">{renderedRows}</ul>
+        <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg ml-4 mt-4 mb-4 p-4 sm:p-6 lg:p-8 h-full transition-colors">
+            <ul className="divide-y divide-gray-200 dark:divide-gray-700">{renderedRows}</ul>
         </div>
     )
 }
