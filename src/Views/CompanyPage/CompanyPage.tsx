@@ -112,7 +112,7 @@ const CompanyPage = () => {
                             title={"Historical Dividend"}
                             subtitle={
                                 Number.isFinite(historicalDividend)
-                                    ? `$${historicalDividend.toFixed(2)}`
+                                    ? `$${(historicalDividend as number).toFixed(2)}`
                                     : "N/A"
                             }
                             icon={FaHistory}
