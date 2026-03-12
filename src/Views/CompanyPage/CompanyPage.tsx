@@ -33,6 +33,9 @@ const CompanyPage = () => {
             if (typeof response === "string") {
                 setServerError(response)
                 setCompany(undefined)
+            } else if (!response) {
+                setServerError(`No profile data available for ${ticker}.`)
+                setCompany(undefined)
             } else {
                 let resolvedDcf = Number.isFinite(response.dcf) ? response.dcf : undefined
 
@@ -109,7 +112,7 @@ const CompanyPage = () => {
                             title={"Historical Dividend"}
                             subtitle={
                                 Number.isFinite(historicalDividend)
-                                    ? `$${historicalDividend.toFixed(2)}`
+                                    ? `$${(historicalDividend as number).toFixed(2)}`
                                     : "N/A"
                             }
                             icon={FaHistory}

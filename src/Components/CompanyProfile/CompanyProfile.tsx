@@ -55,7 +55,7 @@ const CompanyProfile = () => {
                 <div>
                     {fallbackNotice && (
                         <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
-                            {fallbackNotice}
+                         {fallbackNotice}
                         </p>
                     )}
                     <RatioList data={companyData} config={companyProfileRatioConfig} />
