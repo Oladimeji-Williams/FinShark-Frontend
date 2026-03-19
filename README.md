@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinShark Frontend
 
-## Getting Started
+FinShark is a stock research and company financial analytics app built with Next.js and React Router. It provides discovery and deep company research tools, with attention to accessible token-based design and meaningful financial presentation.
 
-First, run the development server:
+## 🚀 Project Overview
+
+This frontend includes:
+
+- Company lookup and profile pages
+- Financial statements (income statement, balance sheet, cashflow)
+- Peer comparison finder
+- Portfolio management UI
+- Theme and dark mode with CSS tokens
+- Responsive and accessible design
+
+## 📁 Key Project Structure
+
+- `src/app/`: root app/pages and layout
+- `src/Routes/Routes.tsx`: application route definitions
+- `src/Components/`: reusable UI components (Navbar, Sidebar, Tile, CompanyDashboard, RatioList, etc.)
+- `src/Views/`: high-level pages (HomePage, SearchPage, CompanyPage, DesignGuideView)
+- `src/lib/fmpClient.ts`: API client for financial data
+- `src/Components/IncomeStatement/`, `BalanceSheet/`, `CashflowStatement/`: statement components
+
+## ⚙️ Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Run development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Optional: run on a fixed port
 
-## Learn More
+```bash
+npm run dev -- --port 3004
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🧠 Updated Feature Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The app uses shared CSS theme variables in `src/app/globals.css` such as `--surface`, `--text-strong`, and `--primary`. Many components are styled with utility classes using these tokens for consistent theme updates.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Recent Visual Enhancements
 
-## Deploy on Vercel
+- `Navbar` fixed sticky top
+- `Sidebar` full height and equal vertical item distribution
+- Deep Dive badge and statement headers highlighted in green tokens
+- Ratio cards restyled with compact, wrapped label/value layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔍 Important Components
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/Components/CompanyDashboard/CompanyDashboard.tsx` — main company dashboard shell with collapsible statement panel
+- `src/Components/Layout/CollapsiblePanel.tsx` — reusable collapsible card layout
+- `src/Components/RatioList/RatioList.tsx` — ratio metrics card list used in company and balance sheet views
+- `src/Components/ComparisonFinder/ComparisonFinder.tsx` — peer comparison helper
+
+## 🧪 Common Scripts
+
+- `npm run dev`: starts local dev server
+- `npm run build`: builds production output
+- `npm run start`: runs production build locally
+- `npm run lint`: run lint checks
+
+## 🛠️ Contributing
+
+1. Create a new branch named feature/...
+2. Implement code and commit with clear message
+3. Run lint and tests
+4. Open PR against `main`
+
+## 📦 Deployment
+
+Deploy like any Next.js app (Vercel or your own container). The app entrypoint is standard Next.js app router.
+
+## 📌 Notes
+
+If you modify theme tokens in `src/app/globals.css`, ensure components use token utilities (`bg-surface`, `text-strong`, etc.) for consistent design.
+
+---
+
+For more details on each component, open the components in `src/Components` and review the usage in `src/Views`.
