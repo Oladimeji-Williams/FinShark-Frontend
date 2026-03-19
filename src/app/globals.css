@@ -2,8 +2,41 @@
 @import "tailwindcss";
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --muted-foreground: #475569;
+    --surface: #ffffff;
+    --surface-soft: #f1f5f9;
+    --border-subtle: #cbd5e1;
+    --card: #ffffff;
+    --card-border: #e2e8f0;
+    --primary: #22c55e;
+    --primary-hover: #16a34a;
+    --text-strong: #0f172a;
+    --text-muted: #475569;
+    --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    --skeleton-base: rgba(226, 232, 240, 0.92);
+    --skeleton-highlight: rgba(255, 255, 255, 0.94);
+    color-scheme: light;
+}
+
+.dark {
+    --background: #020617;
+    --foreground: #e2e8f0;
+    --muted-foreground: #cbd5e1;
+    --surface: #0f172a;
+    --surface-soft: #111827;
+    --border-subtle: #334155;
+    --card: #111827;
+    --card-border: #1f2937;
+    --primary: #22c55e;
+    --primary-hover: #16a34a;
+    --text-strong: #f8fafc;
+    --text-muted: #94a3b8;
+    --shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
+    --skeleton-base: rgba(39, 51, 71, 0.92);
+    --skeleton-highlight: rgba(82, 96, 120, 0.78);
+    color-scheme: dark;
 }
 
 @theme inline {
@@ -22,21 +55,71 @@
     --color-light-green: hsl(156.62 73.33% 58.82%);
 
     --font-sans: "Poppins", sans-serif;
-
     --spacing-180: 32rem;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
+html {
+    background: var(--background);
 }
 
 body {
+    min-height: 100vh;
     background: var(--background);
     color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-sans), "Poppins", sans-serif;
+}
+
+* {
+    color: inherit;
+}
+
+::selection {
+    background: rgba(34, 197, 94, 0.24);
+    color: var(--foreground);
+}
+
+.bg-surface {
+    background-color: var(--surface);
+}
+
+.bg-surface-soft {
+    background-color: var(--surface-soft);
+}
+
+.text-strong {
+    color: var(--text-strong);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.border-subtle {
+    border-color: var(--border-subtle);
+}
+
+.shadow-soft {
+    box-shadow: var(--shadow);
+}
+
+::selection {
+    background: rgba(45, 212, 191, 0.34);
+    color: var(--foreground);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes skeleton {

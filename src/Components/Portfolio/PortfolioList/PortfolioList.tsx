@@ -1,4 +1,5 @@
 import React from "react"
+import CollapsiblePanel from "@/Components/Layout/CollapsiblePanel"
 import PortfolioCard from "../PortfolioCard/PortfolioCard"
 import type { SubmitEvent } from "react"
 
@@ -8,31 +9,34 @@ type Props = {
 }
 
 const PortfolioList = (props: Props) => {
+    if (props.portfolioValues.length === 0) {
+        return null
+    }
+
     return (
-        <section id="portfolio">
-            <h2 className="mb-3 mt-3 text-3xl font-semibold text-center md:text-4xl text-gray-900 dark:text-gray-100">
-                My Portfolio
-            </h2>
-            <div className="relative flex flex-col items-center max-w-5xl mx-auto space-y-10 px-10 mb-5 md:px-6 md:space-y-0 md:space-x-7 md:flex-row">
-                <>
-                    {props.portfolioValues.length > 0 ? (
-                        props.portfolioValues.map((portfolioValue, index) => {
-                            return (
-                                <PortfolioCard
-                                    key={`${portfolioValue}-${index}`} // Use a unique key for each portfolio value
-                                    portfolioValue={portfolioValue}
-                                    onPortfolioDelete={props.onPortfolioDelete}
-                                />
-                            )
-                        })
-                    ) : (
-                        <h3 className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl text-gray-900 dark:text-gray-100">
-                            Your portfolio is empty.
-                        </h3>
-                    )}
-                </>
+        <CollapsiblePanel
+            id="portfolio"
+            badge={
+                <span className="inline-flex items-center rounded-full bg-surface px-4 py-2 text-sm font-semibold text-muted">
+                    {props.portfolioValues.length} saved
+                </span>
+            }
+            collapseLabel="Wrap watchlist"
+            expandLabel="Unfold watchlist"
+            eyebrow="Watchlist"
+            title="Saved Watchlist"
+            description="Keep a lightweight comparison list while you explore companies."
+        >
+            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                {props.portfolioValues.map((portfolioValue, index) => (
+                    <PortfolioCard
+                        key={`${portfolioValue}-${index}`}
+                        portfolioValue={portfolioValue}
+                        onPortfolioDelete={props.onPortfolioDelete}
+                    />
+                ))}
             </div>
-        </section>
+        </CollapsiblePanel>
     )
 }
 

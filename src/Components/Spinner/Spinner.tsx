@@ -9,9 +9,13 @@ type Props = {
 
 const Spinner = (props: Props) => {
     return (
-        <div className="loading-spinner" role="status" aria-busy={props.isLoading ?? true}>
+        <div
+            className="loading-spinner text-[var(--color-dark-blue)] dark:text-[var(--color-light-green)]"
+            role="status"
+            aria-busy={props.isLoading ?? true}
+        >
             <ClipLoader
-                color={props.color ?? "#2563eb"}
+                color={props.color ?? "currentColor"}
                 loading={props.isLoading ?? true}
                 size={props.size ?? 48}
                 aria-label="Loading Spinner"

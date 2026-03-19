@@ -1,6 +1,7 @@
 import { CompanyKeyMetrics } from "@/company"
 import { useCallback, useState } from "react"
 import { useOutletContext } from "react-router-dom"
+import InlineNotice from "@/Components/Feedback/InlineNotice"
 import { getKeyMetrics } from "@/lib/fmpClient"
 import RatioList from "../RatioList/RatioList"
 import { testCompanyKeyMetricsData } from "../Table/testData"
@@ -49,14 +50,22 @@ const CompanyProfile = () => {
 
     return (
         <>
-            {serverError && !companyData && <p>{serverError}</p>}
-            {progressiveError && !companyData && <p>{progressiveError}</p>}
+            {serverError && !companyData ? (
+                <InlineNotice variant="error" title="Company Profile Error">
+                    {serverError}
+                </InlineNotice>
+            ) : null}
+            {progressiveError && !companyData ? (
+                <InlineNotice variant="error" title="Company Profile Error">
+                    {progressiveError}
+                </InlineNotice>
+            ) : null}
             {companyData ? (
-                <div>
+                <div className="space-y-3">
                     {fallbackNotice && (
-                        <p className="mb-3 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
-                         {fallbackNotice}
-                        </p>
+                        <InlineNotice variant="warning" title="Fallback Data">
+                            {fallbackNotice}
+                        </InlineNotice>
                     )}
                     <RatioList data={companyData} config={companyProfileRatioConfig} />
                 </div>

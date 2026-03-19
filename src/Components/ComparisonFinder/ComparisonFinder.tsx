@@ -32,22 +32,32 @@ const ComparisonFinder = ({ ticker }: Props) => {
         void fetchComparisonData()
     }, [ticker])
 
-    if (serverError) return <p className="text-red-600 dark:text-red-400 m-4">{serverError}</p>
-    if (loading)
+    if (serverError) {
         return (
-            <p className="m-4 text-sm text-gray-500 dark:text-gray-400">
+            <p className="rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-950/20 dark:text-red-200">
+                {serverError}
+            </p>
+        )
+    }
+
+    if (loading) {
+        return (
+            <p className="rounded-2xl border border-subtle bg-surface-soft px-4 py-3 text-sm text-muted">
                 Loading comparison peers...
             </p>
         )
-    if (!comparisonData?.peersList?.length)
+    }
+
+    if (!comparisonData?.peersList?.length) {
         return (
-            <p className="m-4 text-sm text-gray-500 dark:text-gray-400">
+            <p className="rounded-2xl border border-subtle bg-surface-soft px-4 py-3 text-sm text-muted">
                 No comparison peers available.
             </p>
         )
+    }
 
     return (
-        <div className="inline-flex rounded-md shadow-sm m-4">
+        <div className="flex flex-wrap gap-3">
             {comparisonData.peersList.map((peerTicker) => (
                 <ComparisonFinderItem key={peerTicker} ticker={peerTicker} />
             ))}
