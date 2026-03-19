@@ -2,7 +2,7 @@
 
 import type { CompanySearch } from "@/company"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { searchCompanies } from "@/lib/fmpClient"
+import { searchCompanies } from "@/lib/fmpApi"
 import type { ChangeEvent, SubmitEvent } from "react"
 import { FaChartLine, FaFolderOpen, FaSearchDollar } from "react-icons/fa"
 import PageContainer from "@/Components/Layout/PageContainer"

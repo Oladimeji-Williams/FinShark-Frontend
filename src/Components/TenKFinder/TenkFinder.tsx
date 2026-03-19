@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import type { CompanyTenK } from "@/company"
 import InlineNotice from "@/Components/Feedback/InlineNotice"
-import { getTenK } from "@/lib/fmpClient"
+import { getTenK } from "@/lib/fmpApi"
 import Spinner from "../Spinner/Spinner"
 import TenKFinderItem from "./TenKFinderItem/TenKFinderItem"
 

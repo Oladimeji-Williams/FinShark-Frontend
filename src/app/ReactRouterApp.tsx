@@ -5,7 +5,10 @@ import { RouterProvider } from "react-router-dom"
 import { createAppRouter } from "@/Routes/Routes"
 
 const ReactRouterApp = () => {
-    const router = useMemo(() => createAppRouter(), [])
+    const router = useMemo(
+        () => createAppRouter(typeof window !== "undefined" ? "browser" : "memory"),
+        []
+    )
 
     return (
         <StrictMode>

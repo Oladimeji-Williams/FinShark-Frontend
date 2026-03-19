@@ -2,7 +2,12 @@ import HomeClient from "@/Components/HomeClient"
 import HomePage from "@/Views/HomePage/HomePage"
 import SearchPage from "@/Views/SearchPage/SearchPage"
 import CompanyPage from "@/Views/CompanyPage/CompanyPage"
-import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom"
+import {
+    createBrowserRouter,
+    createMemoryRouter,
+    Navigate,
+    type RouteObject,
+} from "react-router-dom"
 import CompanyProfile from "@/Components/CompanyProfile/CompanyProfile"
 import IncomeStatement from "@/Components/IncomeStatement/IncomeStatement"
 import DesignGuideView from "@/Views/DesignGuideView/DesignGuideView"
@@ -62,4 +67,9 @@ export const appRoutes: RouteObject[] = [
     { path: "/register", element: <Register /> },
 ]
 
-export const createAppRouter = () => createBrowserRouter(appRoutes)
+export const createAppRouter = (routerType: "browser" | "memory" = "browser") => {
+    if (routerType === "browser" && typeof window !== "undefined") {
+        return createBrowserRouter(appRoutes)
+    }
+    return createMemoryRouter(appRoutes, { initialEntries: ["/"] })
+}
