@@ -4,15 +4,13 @@ type Props = {
     ticker: string
 }
 
-const ComparisonFinderItem = (props: Props) => {
+const ComparisonFinderItem = ({ ticker }: Props) => {
     return (
         <Link
-            to={`/company/${props.ticker}/company-profile`}
-            className="inline-flex items-center p-4 rounded-l-lg shadow-sm m-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            reloadDocument
-            type="button"
+            to={`/company/${ticker}/company-profile`}
+            className="inline-flex items-center rounded-xl bg-transparent px-4 py-2.5 text-sm font-semibold tracking-[0.16em] text-slate-700 uppercase transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-200 hover:text-slate-950 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white"
         >
-            {props.ticker}
+            {ticker}
         </Link>
     )
 }

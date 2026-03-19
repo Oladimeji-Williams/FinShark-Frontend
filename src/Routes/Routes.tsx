@@ -2,12 +2,15 @@ import HomeClient from "@/Components/HomeClient"
 import HomePage from "@/Views/HomePage/HomePage"
 import SearchPage from "@/Views/SearchPage/SearchPage"
 import CompanyPage from "@/Views/CompanyPage/CompanyPage"
-import { createBrowserRouter, type RouteObject } from "react-router-dom"
+import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom"
 import CompanyProfile from "@/Components/CompanyProfile/CompanyProfile"
 import IncomeStatement from "@/Components/IncomeStatement/IncomeStatement"
 import DesignGuideView from "@/Views/DesignGuideView/DesignGuideView"
 import BalanceSheet from "@/Components/BalanceSheet/BalanceSheet"
 import CashflowStatement from "@/Components/CashflowStatement/CashflowStatement"
+import Login from "@/Components/Auth/Login"
+import Register from "@/Components/Auth/Register"
+import RequireAuth from "@/Components/Auth/RequireAuth"
 
 export const appRoutes: RouteObject[] = [
     {
@@ -15,12 +18,37 @@ export const appRoutes: RouteObject[] = [
         element: <HomeClient />,
         children: [
             { index: true, element: <HomePage /> },
-            { path: "home", element: <HomePage /> },
-            { path: "design-guide", element: <DesignGuideView /> },
-            { path: "search", element: <SearchPage /> },
+            {
+                path: "home",
+                element: (
+                    <RequireAuth>
+                        <Navigate to="/" replace />
+                    </RequireAuth>
+                ),
+            },
+            {
+                path: "design-guide",
+                element: (
+                    <RequireAuth>
+                        <DesignGuideView />
+                    </RequireAuth>
+                ),
+            },
+            {
+                path: "search",
+                element: (
+                    <RequireAuth>
+                        <SearchPage />
+                    </RequireAuth>
+                ),
+            },
             {
                 path: "company/:ticker",
-                element: <CompanyPage />,
+                element: (
+                    <RequireAuth>
+                        <CompanyPage />
+                    </RequireAuth>
+                ),
                 children: [
                     { path: "company-profile", element: <CompanyProfile /> },
                     { path: "income-statement", element: <IncomeStatement /> },
@@ -30,6 +58,8 @@ export const appRoutes: RouteObject[] = [
             },
         ],
     },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
 ]
 
 export const createAppRouter = () => createBrowserRouter(appRoutes)

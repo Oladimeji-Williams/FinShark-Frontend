@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { CompanyCashflow } from "@/company"
+import InlineNotice from "@/Components/Feedback/InlineNotice"
 import { getCashflowStatement } from "@/lib/fmpClient"
 import { testCashflowStatementData } from "../Table/testData"
 import { useProgressiveData } from "../../../hooks/UseProgressiveData"
@@ -27,12 +28,12 @@ const CashflowStatementRow = ({
     return (
         <div
             style={{ ...style, display: "grid", gridTemplateColumns }}
-            className="border-b border-gray-200 dark:border-gray-700"
+            className="border-b border-primary/20 bg-primary/5 text-strong hover:bg-primary/10"
         >
             {tableConfig.map((column) => (
                 <div
                     key={column.label}
-                    className="px-4 py-2 whitespace-nowrap text-sm font-normal text-gray-900 dark:text-gray-100"
+                    className="px-4 py-3 whitespace-nowrap text-sm font-medium text-strong"
                 >
                     {column.render(company)}
                 </div>
@@ -78,34 +79,44 @@ const CashflowStatement = () => {
 
     return (
         <>
-            {serverError && cashflowStatement.length === 0 && <p>{serverError}</p>}
-            {progressiveError && cashflowStatement.length === 0 && <p>{progressiveError}</p>}
+            {serverError && cashflowStatement.length === 0 ? (
+                <InlineNotice variant="error" title="Cashflow Statement Error">
+                    {serverError}
+                </InlineNotice>
+            ) : null}
+            {progressiveError && cashflowStatement.length === 0 ? (
+                <InlineNotice variant="error" title="Cashflow Statement Error">
+                    {progressiveError}
+                </InlineNotice>
+            ) : null}
 
             {loading && cashflowStatement.length === 0 ? (
                 <TableSkeleton />
             ) : cashflowStatement.length > 0 ? (
-                <div className="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg p-4 sm:p-6 xl:p-8 transition-colors">
-                    {fallbackNotice && (
-                        <p className="mb-3 rounded border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-sm text-amber-700 dark:text-amber-300">
-                            {fallbackNotice}
-                        </p>
-                    )}
-                    {loading && total > 0 && (
-                        <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-                            Streaming rows: {cashflowStatement.length}/{total}
-                        </p>
-                    )}
+                <div className="overflow-hidden rounded-[1.9rem] border border-subtle bg-surface shadow-soft backdrop-blur-xl transition-colors">
+                    <div className="space-y-3 border-b border-subtle px-5 py-5 sm:px-6">
+                        {fallbackNotice && (
+                            <InlineNotice variant="warning" title="Fallback Data">
+                                {fallbackNotice}
+                            </InlineNotice>
+                        )}
+                        {loading && total > 0 ? (
+                            <p className="text-sm font-medium text-muted">
+                                Streaming rows: {cashflowStatement.length}/{total}
+                            </p>
+                        ) : null}
+                    </div>
 
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto px-3 py-3 sm:px-5 sm:py-5">
                         <div style={{ width: tableWidth }}>
                             <div
                                 style={{ display: "grid", gridTemplateColumns }}
-                                className="border-b border-gray-200 dark:border-gray-700"
+                                className="border-b border-primary/30 bg-primary/10"
                             >
                                 {cashflowTableConfig.map((column) => (
                                     <div
                                         key={column.label}
-                                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.22em] text-primary"
                                     >
                                         {column.label}
                                     </div>
@@ -115,7 +126,7 @@ const CashflowStatement = () => {
                             <List
                                 rowComponent={CashflowStatementRow}
                                 rowCount={cashflowStatement.length}
-                                rowHeight={40}
+                                rowHeight={48}
                                 rowProps={{
                                     rows: cashflowStatement,
                                     tableConfig: cashflowTableConfig,
@@ -126,7 +137,7 @@ const CashflowStatement = () => {
                                 style={{
                                     height: Math.min(
                                         480,
-                                        Math.max(200, cashflowStatement.length * 40)
+                                        Math.max(240, cashflowStatement.length * 48)
                                     ),
                                     width: tableWidth,
                                 }}

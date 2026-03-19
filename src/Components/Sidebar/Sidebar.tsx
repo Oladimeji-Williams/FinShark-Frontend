@@ -1,47 +1,61 @@
-import React from "react"
-import { FaBuilding, FaChartLine, FaBalanceScale, FaDollarSign } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { FaBalanceScale, FaBuilding, FaChartLine, FaDollarSign } from "react-icons/fa"
+import type { IconType } from "react-icons"
+import { NavLink } from "react-router-dom"
 
-type Props = {}
+const sidebarItems: Array<{ to: string; label: string; icon: IconType }> = [
+    {
+        to: "company-profile",
+        label: "Company Profile",
+        icon: FaBuilding,
+    },
+    {
+        to: "income-statement",
+        label: "Income Statement",
+        icon: FaChartLine,
+    },
+    {
+        to: "balance-sheet",
+        label: "Balance Sheet",
+        icon: FaBalanceScale,
+    },
+    {
+        to: "cashflow-statement",
+        label: "Cashflow Statement",
+        icon: FaDollarSign,
+    },
+]
 
-const Sidebar = (props: Props) => {
+const Sidebar = () => {
+    const shellClassName =
+        "relative block w-full h-full rounded-[1.75rem] border border-subtle bg-surface p-4 shadow-soft transition-all duration-300 ease-in-out"
+    const groupClassName =
+        "flex h-full w-full flex-col rounded-[1.35rem] bg-surface-soft p-2 ring-1 ring-subtle"
+    const itemClassName =
+        "flex h-14 flex-1 items-center gap-3 rounded-xl bg-transparent px-4 text-sm font-medium text-strong transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-soft hover:text-strong"
+    const getItemClassName = ({ isActive }: { isActive: boolean }) =>
+        isActive
+            ? `${itemClassName} bg-[var(--color-light-green)] text-slate-900 shadow-[0_14px_30px_rgba(45,212,191,0.24)] hover:bg-[var(--color-light-green)] hover:text-slate-900`
+            : itemClassName
+
     return (
-        <nav className="block py-4 px-6 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-xl left-0 absolute flex-row flex-nowrap md:z-10 z-9999 transition-all duration-300 ease-in-out transform md:translate-x-0 -translate-x-full">
-            <button className="md:hidden flex items-center justify-center cursor-pointer text-blueGray-700 w-6 h-10 border-l-0 border-r border-t border-b border-solid border-blueGray-100 text-xl leading-none bg-white rounded-r border border-solid border-transparent absolute top-1/2 -right-24-px focus:outline-none z-9998">
-                <i className="fas fa-ellipsis-v"></i>
-            </button>
-
-            <div className="flex-col min-h-full px-0 flex flex-wrap items-center justify-between w-full mx-auto overflow-y-auto overflow-x-hidden">
-                <div className="flex bg-white dark:bg-gray-800 flex-col items-stretch opacity-100 relative mt-4 overflow-y-auto overflow-x-hidden h-auto z-40 items-center flex-1 rounded w-full">
-                    <div className="md:flex-col md:min-w-full flex flex-col list-none">
-                        <Link
-                            to="company-profile"
-                            className="flex md:min-w-full text-sm uppercase py-3 font-bold block text-blueGray-700 dark:text-gray-300 hover:text-blueGray-500 dark:hover:text-lightGreen pt-1 pb-4 no-underline transition-colors"
-                        >
-                            <FaBuilding className="mr-2 text-blueGray-400 dark:text-gray-500 text-base" />
-                            <h6 className="ml-3">Company Profile</h6>
-                        </Link>
-                        <Link
-                            to="income-statement"
-                            className="flex md:min-w-full text-sm uppercase py-3 font-bold block text-blueGray-700 dark:text-gray-300 hover:text-blueGray-500 dark:hover:text-lightGreen pt-1 pb-4 no-underline transition-colors"
-                        >
-                            <FaChartLine className="mr-2 text-blueGray-400 dark:text-gray-500 text-base" />
-                            <h6 className="ml-3">Income Statement</h6>
-                        </Link>
-                        <Link
-                            to="balance-sheet"
-                            className="flex md:min-w-full text-sm uppercase py-3 font-bold block text-blueGray-700 dark:text-gray-300 hover:text-blueGray-500 dark:hover:text-lightGreen pt-1 pb-4 no-underline transition-colors"
-                        >
-                            <FaBalanceScale className="mr-2 text-blueGray-400 dark:text-gray-500 text-base" />
-                            <h6 className="ml-3">Balance Sheet</h6>
-                        </Link>
-                        <Link
-                            to="cashflow-statement"
-                            className="flex md:min-w-full text-sm uppercase py-3 font-bold block text-blueGray-700 dark:text-gray-300 hover:text-blueGray-500 dark:hover:text-lightGreen pt-1 pb-4 no-underline transition-colors"
-                        >
-                            <FaDollarSign className="mr-2 text-blueGray-400 dark:text-gray-500 text-base" />
-                            <h6 className="ml-3">Cashflow Statement</h6>
-                        </Link>
+        <nav className={`${shellClassName} h-full`}>
+            <div className="flex h-full w-full flex-col">
+                <div className={`${groupClassName} h-full`}>
+                    <div className="flex h-full flex-col">
+                        {sidebarItems.map(({ to, label, icon: Icon }) => (
+                            <NavLink key={to} to={to} className={getItemClassName}>
+                                {({ isActive }) => (
+                                    <>
+                                        <Icon
+                                            className={`h-4 w-4 shrink-0 ${
+                                                isActive ? "text-white" : "text-muted"
+                                            }`}
+                                        />
+                                        <span>{label}</span>
+                                    </>
+                                )}
+                            </NavLink>
+                        ))}
                     </div>
                 </div>
             </div>

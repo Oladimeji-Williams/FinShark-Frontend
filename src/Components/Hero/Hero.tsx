@@ -1,34 +1,45 @@
-import React from "react"
 import Image from "next/image"
+import PageContainer from "@/Components/Layout/PageContainer"
 import hero from "../../assets/hero.png"
 import { Link } from "react-router-dom"
 
-type Props = {}
-
-const Hero = (props: Props) => {
+const Hero = () => {
     return (
-        <section id="hero">
-            <div className="container flex flex-col-reverse mx-auto p-8 lg:flex-row">
-                <div className="flex flex-col space-y-10 mb-44 m-10 lg:m-10 xl:m-20 lg:mt:16 lg:w-1/2 xl:mb-52">
-                    <h1 className="text-5xl font-bold text-center text-black dark:text-white lg:text-6xl lg:max-w-md lg:text-left transition-colors">
-                        Financial data with no news.
-                    </h1>
-                    <p className="text-2xl text-center text-gray-600 dark:text-gray-300 lg:max-w-md lg:text-left transition-colors">
-                        Search relevant financial documents without fear mongering and fake news.
-                    </p>
-                    <div className="mx-auto lg:mx-0">
-                        <Link
-                            to="/search"
-                            className="inline-block py-5 px-10 text-2xl font-bold text-white bg-[var(--color-light-green)] rounded lg:py-4 hover:opacity-70"
-                        >
-                            Get Started
-                        </Link>
+        <section id="hero" className="pb-16 pt-4 bg-[var(--background)] text-[var(--foreground)]">
+            <PageContainer>
+                <div className="rounded-[2rem] border border-subtle bg-surface p-5 shadow-soft lg:p-8">
+                    <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,1fr)]">
+                        <div className="space-y-6">
+                            <span className="inline-flex items-center rounded-full bg-[var(--primary)]/15 px-4 py-2 text-sm font-semibold text-[var(--primary)]">
+                                Numbers first research
+                            </span>
+                            <h1 className="max-w-3xl text-center text-5xl font-extrabold leading-tight text-[var(--text-strong)] lg:text-left lg:text-6xl">
+                                Financial data with no news.
+                            </h1>
+                            <p className="max-w-2xl text-center text-xl leading-8 text-[var(--text-muted)] lg:text-left">
+                                Search relevant financial documents without fear mongering and fake
+                                news.
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+                                <Link
+                                    to="/search"
+                                    className="inline-flex items-center rounded-2xl bg-[var(--primary)] px-6 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_40px_rgba(45,212,191,0.24)] transition hover:-translate-y-0.5 hover:bg-[var(--primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
+                                >
+                                    Get started
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="overflow-hidden rounded-[1.5rem] border border-subtle bg-surface p-3 shadow-soft">
+                            <Image
+                                src={hero}
+                                alt="Hero image"
+                                className="w-full rounded-[1.25rem]"
+                                priority
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className="mb-24 mx-auto md:w-180 md:px-10 lg:mb-0 lg:w-1/2">
-                    <Image src={hero} alt="Hero image" />
-                </div>
-            </div>
+            </PageContainer>
         </section>
     )
 }

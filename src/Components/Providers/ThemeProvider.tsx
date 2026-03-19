@@ -2,11 +2,15 @@
 
 import { ThemeProvider } from "next-themes"
 import { ReactNode } from "react"
+import { AuthProvider } from "@/Components/Providers/AuthProvider"
+import { ToastProvider } from "@/Components/Toast/ToastProvider"
 
 export function Providers({ children }: { children: ReactNode }) {
     return (
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <AuthProvider>
+                <ToastProvider>{children}</ToastProvider>
+            </AuthProvider>
         </ThemeProvider>
     )
 }
