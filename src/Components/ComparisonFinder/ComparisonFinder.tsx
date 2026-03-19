@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getComparisonData } from "@/lib/fmpClient"
+import { getComparisonData } from "@/lib/fmpApi"
 import type { CompanyComparisonData } from "@/company"
 import ComparisonFinderItem from "./ComparisonFinderItem/ComparisonFinderItem"
 

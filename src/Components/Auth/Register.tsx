@@ -133,6 +133,7 @@ const Register = () => {
                     }
                     {...register("password")}
                 />
+
                 <div className="grid gap-2 sm:grid-cols-2">
                     {passwordRequirementLabels.map((label, index) => {
                         const met = passwordChecks[index]
@@ -143,7 +144,7 @@ const Register = () => {
                                 className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-sm ${
                                     met
                                         ? "border-emerald-200 bg-emerald-50/80 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-950/20 dark:text-emerald-200"
-                                        : "border-subtle bg-surface-soft text-muted dark:border-subtle dark:bg-surface dark:text-muted"
+                                        : "border-subtle bg-surface-soft text-slate-700 dark:border-subtle dark:bg-surface dark:text-zinc-200"
                                 }`}
                             >
                                 <FaCheckCircle className="h-3.5 w-3.5 shrink-0" />
@@ -178,12 +179,12 @@ const Register = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-light-blue)] px-4 py-4 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--color-dark-blue)] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-4 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {isSubmitting ? "Creating your account..." : "Create account"}
                     <FaArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
-                <div className="rounded-2xl border border-subtle bg-surface-soft px-4 py-3 text-sm leading-6 text-muted dark:border-subtle dark:bg-surface dark:text-muted">
+                <div className="rounded-2xl border border-subtle bg-surface-soft px-4 py-3 text-sm leading-6 text-slate-700 dark:border-subtle dark:bg-surface dark:text-zinc-200">
                     Accounts are currently stored in this browser for the demo, but the signup flow
                     now uses production-style field validation and confirmation checks.
                 </div>

@@ -5,7 +5,7 @@ import type { IconType } from "react-icons"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { CompanyProfile } from "@/company"
-import { getCompanyProfile, getDiscountedCashFlow, getHistoricalDividends } from "@/lib/fmpClient"
+import { getCompanyProfile, getDiscountedCashFlow, getHistoricalDividends } from "@/lib/fmpApi"
 import {
     FaArrowDown,
     FaArrowUp,

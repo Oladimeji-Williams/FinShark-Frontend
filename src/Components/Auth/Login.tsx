@@ -63,11 +63,11 @@ const Login = () => {
             footerActionLabel="Create an account"
             footerActionTo="/register"
         >
-            {errors.root?.message ? (
-                <div className="mb-5 rounded-2xl border border-red-200 bg-red-50/80 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-500/30 dark:bg-red-950/20 dark:text-red-200">
+            {errors.root?.message && (
+                <div className="mb-5 rounded-2xl border border-[var(--danger)] bg-[var(--danger-bg)] px-4 py-3 text-sm text-strong">
                     {errors.root.message}
                 </div>
-            ) : null}
+            )}
             <form className="space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <AuthField
                     label="Work email"
@@ -90,7 +90,7 @@ const Login = () => {
                         <button
                             type="button"
                             onClick={() => setShowPassword((current) => !current)}
-                            className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
+                            className="rounded-lg p-2 text-muted transition hover:bg-surface hover:text-strong dark:hover:bg-surface-soft dark:hover:text-strong"
                             aria-label={showPassword ? "Hide password" : "Show password"}
                         >
                             {showPassword ? (
@@ -102,16 +102,18 @@ const Login = () => {
                     }
                     {...register("password")}
                 />
+
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-4 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(15,23,42,0.18)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-slate-950 dark:hover:bg-zinc-100"
+                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-4 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                    {isSubmitting ? "Signing you in..." : "Sign in to FinShark"}
+                    {isSubmitting ? "Signing you in..." : "Sign in"}
                     <FaArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300">
-                    This project currently keeps account data in the current browser, but the validation and UX now follow a production-style flow.
+                <div className="rounded-2xl border px-4 py-3 text-sm text-muted">
+                    This project currently keeps account data in the current browser, but the
+                    validation and UX now follow a production-style flow.
                 </div>
             </form>
         </AuthShell>

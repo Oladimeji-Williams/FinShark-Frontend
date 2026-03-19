@@ -1,63 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Rubik&display=swap");
 @import "tailwindcss";
 
+/* =========================
+   THEME TOKENS
+========================= */
 :root {
     --background: #f8fafc;
     --foreground: #0f172a;
-    --muted-foreground: #475569;
+
     --surface: #ffffff;
     --surface-soft: #f1f5f9;
+
     --border-subtle: #cbd5e1;
-    --card: #ffffff;
-    --card-border: #e2e8f0;
+
+    --text-strong: #0f172a;
+    --text-muted: #334155;
+
     --primary: #22c55e;
     --primary-hover: #16a34a;
-    --text-strong: #0f172a;
-    --text-muted: #475569;
+
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+
+    --focus-ring: rgba(34, 197, 94, 0.35);
+
     --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-    --skeleton-base: rgba(226, 232, 240, 0.92);
-    --skeleton-highlight: rgba(255, 255, 255, 0.94);
+
     color-scheme: light;
 }
 
 .dark {
     --background: #020617;
     --foreground: #e2e8f0;
-    --muted-foreground: #cbd5e1;
+
     --surface: #0f172a;
     --surface-soft: #111827;
+
     --border-subtle: #334155;
-    --card: #111827;
-    --card-border: #1f2937;
+
+    --text-strong: #f8fafc;
+    --text-muted: #cbd5e1;
+
     --primary: #22c55e;
     --primary-hover: #16a34a;
-    --text-strong: #f8fafc;
-    --text-muted: #94a3b8;
+
+    --danger: #f87171;
+    --danger-bg: rgba(127, 29, 29, 0.2);
+
+    --success: #34d399;
+    --success-bg: rgba(6, 78, 59, 0.2);
+
+    --focus-ring: rgba(34, 197, 94, 0.25);
+
     --shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
-    --skeleton-base: rgba(39, 51, 71, 0.92);
-    --skeleton-highlight: rgba(82, 96, 120, 0.78);
+
     color-scheme: dark;
 }
 
-@theme inline {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
-
-    --breakpoint-sm: 480px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 1020px;
-    --breakpoint-xl: 1440px;
-
-    --color-light-blue: hsl(215.02 98.39% 51.18%);
-    --color-dark-blue: hsl(213.86 58.82% 46.67%);
-    --color-light-green: hsl(156.62 73.33% 58.82%);
-
-    --font-sans: "Poppins", sans-serif;
-    --spacing-180: 32rem;
-}
-
+/* =========================
+   BASE
+========================= */
 html {
     background: var(--background);
 }
@@ -66,7 +70,7 @@ body {
     min-height: 100vh;
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-sans), "Poppins", sans-serif;
+    font-family: var(--font-geist-sans), sans-serif;
 }
 
 * {
@@ -74,16 +78,18 @@ body {
 }
 
 ::selection {
-    background: rgba(34, 197, 94, 0.24);
-    color: var(--foreground);
+    background: rgba(34, 197, 94, 0.25);
 }
 
+/* =========================
+   UTILITIES
+========================= */
 .bg-surface {
-    background-color: var(--surface);
+    background: var(--surface);
 }
 
 .bg-surface-soft {
-    background-color: var(--surface-soft);
+    background: var(--surface-soft);
 }
 
 .text-strong {
@@ -102,31 +108,38 @@ body {
     box-shadow: var(--shadow);
 }
 
-::selection {
-    background: rgba(45, 212, 191, 0.34);
-    color: var(--foreground);
+/* =========================
+   INPUT SYSTEM
+========================= */
+.input-base {
+    @apply w-full rounded-2xl py-3.5 pl-11 pr-4 text-sm outline-none ring-4 ring-transparent transition;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.input-focus {
+    @apply focus:ring-inset;
+    transition: all 0.2s ease;
 }
 
-.animate-fade-in {
-    animation: fadeIn 0.25s ease-out;
+.input-default:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
-@keyframes skeleton {
-    0% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
+.input-error {
+    border-color: var(--danger);
+    background: var(--danger-bg);
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+/* =========================
+   BUTTON FOCUS
+========================= */
+button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
