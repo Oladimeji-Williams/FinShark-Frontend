@@ -20,13 +20,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
     children,
-}: Readonly<{
+}: {
     children: React.ReactNode
-}>) {
+}) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <Providers>{children}</Providers>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen overflow-hidden`}
+            >
+                <Providers>
+                    <div className="flex h-full flex-col">
+                        {children} {/* HomeClient or login/register will handle their own scrolling */}
+                    </div>
+                </Providers>
             </body>
         </html>
     )

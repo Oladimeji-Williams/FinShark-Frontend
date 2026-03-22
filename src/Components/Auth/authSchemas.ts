@@ -9,11 +9,24 @@ const emailSchema = z
     .email("Enter a valid email address.")
     .transform((value) => value.toLowerCase())
 
-const fullNameSchema = z
+const userNameSchema = z
     .string()
     .trim()
-    .min(2, "Enter your full name.")
-    .max(80, "Full name must be 80 characters or fewer.")
+    .min(1, "Username is required.")
+    .max(50, "Username must be 50 characters or fewer.")
+    .regex(/^[a-zA-Z0-9._-]+$/, "Username can only contain letters, numbers, dots, underscores, and hyphens.")
+
+const firstNameSchema = z
+    .string()
+    .trim()
+    .min(1, "First name is required.")
+    .max(50, "First name must be 50 characters or fewer.")
+
+const lastNameSchema = z
+    .string()
+    .trim()
+    .min(1, "Last name is required.")
+    .max(50, "Last name must be 50 characters or fewer.")
 
 const passwordSchema = z
     .string()
@@ -26,7 +39,7 @@ const passwordSchema = z
 
 export const persistedUserSchema = z.object({
     email: emailSchema,
-    fullName: fullNameSchema,
+    userName: userNameSchema,
     password: z.string().min(1),
 })
 
@@ -45,14 +58,14 @@ export const loginSchema = z.object({
 })
 
 export const registerCredentialsSchema = z.object({
-    fullName: fullNameSchema,
+    userName: userNameSchema,
     email: emailSchema,
     password: passwordSchema,
 })
 
 export const registerSchema = registerCredentialsSchema
     .extend({
-        confirmPassword: z.string().min(1, "Please confirm your password."),
+        confirmPassword: passwordSchema,
     })
     .refine((data) => data.password === data.confirmPassword, {
         path: ["confirmPassword"],

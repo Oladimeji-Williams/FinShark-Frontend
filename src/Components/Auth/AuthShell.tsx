@@ -15,6 +15,7 @@ type AuthShellProps = {
     footerActionLabel: string
     footerActionTo: string
     children: ReactNode
+    
 }
 
 const highlights = [
@@ -103,7 +104,7 @@ const AuthShell = ({
                             </div>
                         </div>
                     </aside>
-                    <section className="relative px-6 py-8 sm:px-10 sm:py-10 lg:px-12">
+                    <section className="relative px-6 py-8 sm:px-10 sm:py-10 lg:px-12 flex flex-col h-screen overflow-auto">
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.5))] dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.6),rgba(15,23,42,0.3))] pointer-events-none" />
                         <div className="relative">
                             <div className="mx-auto w-full max-w-md">

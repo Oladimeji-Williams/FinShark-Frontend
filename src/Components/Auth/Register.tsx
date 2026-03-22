@@ -42,7 +42,7 @@ const Register = () => {
         mode: "onBlur",
         reValidateMode: "onChange",
         defaultValues: {
-            fullName: "",
+            userName: "",
             email: "",
             password: "",
             confirmPassword: "",
@@ -63,7 +63,7 @@ const Register = () => {
     const onSubmit = async (values: RegisterFormValues) => {
         clearErrors("root")
         try {
-            await registerAccount(values.email, values.fullName, values.password)
+            await registerAccount(values.userName, values.email, values.password)
             showToast("Account created successfully.", "success")
             window.setTimeout(() => {
                 navigate("/login", { replace: true })
@@ -92,13 +92,13 @@ const Register = () => {
             ) : null}
             <form className="space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <AuthField
-                    label="Full name"
+                    label="Username"
                     icon={FaUser}
                     type="text"
-                    placeholder="Jane Doe"
-                    autoComplete="name"
-                    error={errors.fullName?.message}
-                    {...register("fullName")}
+                    placeholder="trader123"
+                    autoComplete="username"
+                    error={errors.userName?.message}
+                    {...register("userName")}
                 />
                 <AuthField
                     label="Work email"
@@ -179,7 +179,13 @@ const Register = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-4 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group flex w-full items-center justify-center gap-2 rounded-2xl 
+                    bg-[color:var(--primary)] px-4 py-4 text-sm font-semibold text-white 
+                    shadow-[0_14px_30px_rgba(34,197,94,0.25)] 
+                    transition-all duration-200 
+                    hover:-translate-y-0.5 
+                    hover:bg-[color:var(--primary-hover)] 
+                    disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {isSubmitting ? "Creating your account..." : "Create account"}
                     <FaArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
