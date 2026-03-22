@@ -68,7 +68,7 @@ const Login = () => {
                     {errors.root.message}
                 </div>
             )}
-            <form className="space-y-5" noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-5 px-4 py-6 max-w-md mx-auto" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <AuthField
                     label="Work email"
                     icon={FaEnvelope}
@@ -102,11 +102,16 @@ const Login = () => {
                     }
                     {...register("password")}
                 />
-
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-4 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group flex w-full items-center justify-center gap-2 rounded-2xl 
+                    bg-[color:var(--primary)] px-4 py-4 text-sm font-semibold text-white 
+                    shadow-[0_14px_30px_rgba(34,197,94,0.25)] 
+                    transition-all duration-200 
+                    hover:-translate-y-0.5 
+                    hover:bg-[color:var(--primary-hover)] 
+                    disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {isSubmitting ? "Signing you in..." : "Sign in"}
                     <FaArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

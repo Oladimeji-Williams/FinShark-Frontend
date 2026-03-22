@@ -92,6 +92,18 @@ body {
     background: var(--surface-soft);
 }
 
+.bg-primary {
+    background: var(--primary);
+}
+
+.bg-primary-hover {
+    background: var(--primary-hover);
+}
+
+.hover\:bg-primary-hover:hover {
+    background: var(--primary-hover);
+}
+
 .text-strong {
     color: var(--text-strong);
 }

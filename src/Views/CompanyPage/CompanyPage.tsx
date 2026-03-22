@@ -30,6 +30,7 @@ import Spinner from "@/Components/Spinner/Spinner"
 import ComparisonFinder from "@/Components/ComparisonFinder/ComparisonFinder"
 import CollapsiblePanel from "@/Components/Layout/CollapsiblePanel"
 import PageContainer from "@/Components/Layout/PageContainer"
+import StockCommentSection from "@/Components/Comments/StockComment"
 import {
     formatCurrencyCompact,
     formatLargeMonetaryNumber,
@@ -219,7 +220,7 @@ const CompanyPage = () => {
                         <div className="relative grid gap-8 p-6 sm:p-8 xl:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
                             <div>
                                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-                                    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden bg-[var(--foreground)] text-2xl font-semibold tracking-[0.18em] text-[var(--surface)] shadow-soft">
+                                    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[1.6rem] bg-[var(--foreground)] text-2xl font-semibold tracking-[0.18em] text-[var(--surface)] shadow-soft">
                                         {company.image && !company.defaultImage ? (
                                             <Image
                                                 src={company.image}
@@ -510,6 +511,10 @@ const CompanyPage = () => {
                                 </div>
                             </CollapsiblePanel>
                         </div>
+                    </section>
+
+                    <section className="mt-8">
+                        <StockCommentSection ticker={ticker ?? ""} />
                     </section>
                 </CompanyDashboard>
             </div>

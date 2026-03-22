@@ -1,110 +1,88 @@
 "use client"
 
-import { createContext, ReactNode, useContext, useMemo, useState } from "react"
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react"
+import type { User } from "@/types"
 import {
-    storedAuthSchema,
-    storedUsersSchema,
-    userSchema,
-    loginSchema,
-    registerCredentialsSchema,
-    type User,
-} from "@/Components/Auth/authSchemas"
+    register as apiRegister,
+    login as apiLogin,
+    logout as apiLogout,
+    getProfile as apiGetProfile,
+    isAuthenticated,
+} from "@/lib/usersApi"
 
 type AuthState = {
     user: User | null
     token: string | null
     isAuthenticated: boolean
+    loading: boolean
     login: (email: string, password: string) => Promise<void>
-    register: (email: string, fullName: string, password: string) => Promise<void>
+    register: (userName: string, email: string, password: string) => Promise<void>
     logout: () => void
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined)
 
-const AUTH_STORAGE_KEY = "finshark-auth"
-const USERS_STORAGE_KEY = "finshark-registered-users"
-
-const getStoredAuth = (): { user: User; token: string } | null => {
-    if (typeof window === "undefined") return null
-    try {
-        const serialized = localStorage.getItem(AUTH_STORAGE_KEY)
-        if (!serialized) return null
-        const parsed = storedAuthSchema.safeParse(JSON.parse(serialized))
-        return parsed.success ? parsed.data : null
-    } catch {
-        return null
-    }
-}
-
-const saveStoredAuth = (data: { user: User; token: string } | null) => {
-    if (typeof window === "undefined") return
-    if (!data) {
-        localStorage.removeItem(AUTH_STORAGE_KEY)
-        return
-    }
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data))
-}
-
-const getUsers = (): Array<{ email: string; fullName: string; password: string }> => {
-    if (typeof window === "undefined") return []
-    try {
-        const parsed = storedUsersSchema.safeParse(JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) ?? "[]"))
-        return parsed.success ? parsed.data : []
-    } catch {
-        return []
-    }
-}
-
-const setUsers = (users: Array<{ email: string; fullName: string; password: string }>) => {
-    if (typeof window === "undefined") return
-    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users))
-}
-
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(() => getStoredAuth()?.user ?? null)
-    const [token, setToken] = useState<string | null>(() => getStoredAuth()?.token ?? null)
-    const login = async (email: string, password: string) => {
-        const credentials = loginSchema.safeParse({ email, password })
-        if (!credentials.success) {
-            throw new Error(
-                credentials.error.issues[0]?.message ?? "Please review your credentials and try again."
-            )
-        }
-        const users = getUsers()
-        const existing = users.find((u) => u.email.toLowerCase() === credentials.data.email)
-        if (!existing || existing.password !== password) {
-            throw new Error("Invalid credentials. Please check your email and password.")
+    const [user, setUser] = useState<User | null>(null)
+    const [token, setToken] = useState<string | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    // Initialize auth on mount by checking stored token and fetching profile
+    useEffect(() => {
+        const initAuth = async () => {
+            try {
+                if (isAuthenticated()) {
+                    const profile = await apiGetProfile()
+                    setUser(profile)
+                    setToken(localStorage.getItem("auth_token"))
+                }
+            } catch (error) {
+                console.error("Failed to restore auth:", error)
+                apiLogout()
+            } finally {
+                setLoading(false)
+            }
         }
 
-        const userData = userSchema.parse({ email: existing.email, fullName: existing.fullName })
-        const fakeToken = `token-${Date.now()}`
-        setUser(userData)
-        setToken(fakeToken)
-        saveStoredAuth({ user: userData, token: fakeToken })
+        void initAuth()
+    }, [])
+
+    const login = async (email: string, password: string) => {
+        try {
+            const response = await apiLogin({ email, password })
+            if (response.user && response.token) {
+                setUser(response.user)
+                setToken(response.token)
+            } else {
+                throw new Error("Invalid login response")
+            }
+        } catch (error) {
+            throw error
+        }
     }
 
-    const register = async (email: string, fullName: string, password: string) => {
-        const credentials = registerCredentialsSchema.safeParse({ email, fullName, password })
-        if (!credentials.success) {
-            throw new Error(
-                credentials.error.issues[0]?.message ??
-                    "Please review your registration details and try again."
-            )
+    const register = async (userName: string, email: string, password: string) => {
+        try {
+            const response = await apiRegister({
+                userName,
+                email,
+                password,
+            })
+            if (response.user && response.token) {
+                setUser(response.user)
+                setToken(response.token)
+            } else {
+                throw new Error("Invalid register response")
+            }
+        } catch (error) {
+            throw error
         }
-        const users = getUsers()
-        const alreadyExists = users.some((u) => u.email.toLowerCase() === credentials.data.email)
-        if (alreadyExists) {
-            throw new Error("An account with that email already exists.")
-        }
-
-        const nextUsers = [...users, credentials.data]
-        setUsers(nextUsers)
     }
 
     const logout = () => {
         setUser(null)
         setToken(null)
-        saveStoredAuth(null)
+        apiLogout()
     }
 
     const value = useMemo(
@@ -112,11 +90,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
             user,
             token,
             isAuthenticated: Boolean(user && token),
+            loading,
             login,
             register,
             logout,
         }),
-        [user, token]
+        [user, token, loading]
     )
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
